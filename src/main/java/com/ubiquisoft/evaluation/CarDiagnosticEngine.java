@@ -1,18 +1,28 @@
 package com.ubiquisoft.evaluation;
 
+import com.google.common.base.Strings;
 import com.ubiquisoft.evaluation.domain.Car;
 import com.ubiquisoft.evaluation.domain.ConditionType;
-import com.ubiquisoft.evaluation.domain.Part;
 import com.ubiquisoft.evaluation.domain.PartType;
+import com.ubiquisoft.evaluation.domain.xml.unmarshaller.CarCreator;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import java.io.InputStream;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class CarDiagnosticEngine {
+	private boolean thereAreMissingParts = false;
 
 	public void executeDiagnostics(Car car) {
+
+		List<String> missingDataFields = checkForMissingFields(car);
+		printNamesOfAnyMissingFields(missingDataFields);
+
+		Map<PartType, Integer> missingPartsMap = checkForMissingParts(car);
+		printNamesOfAnyMissingParts(missingPartsMap);
+
 		/*
 		 * Implement basic diagnostics and print results to console.
 		 *
@@ -33,13 +43,68 @@ public class CarDiagnosticEngine {
 		 * A damaged part is one that has any condition other than NEW, GOOD, or WORN.
 		 *
 		 * Important:
-		 *      If any validation fails, complete whatever step you are actively one and end diagnostics early.
+		 *      If any validation fails, complete whatever step you are actively on and end diagnostics early.
 		 *
 		 * Treat the console as information being read by a user of this application. Attempts should be made to ensure
 		 * console output is as least as informative as the provided methods.
 		 */
 
 
+	}
+
+	private List<String> checkForMissingFields(Car car) {
+		List<String> missingFields = new ArrayList<>();;
+		if (fieldIsMissing(car.getMake()))
+			missingFields.add(car.getMake());
+		if (fieldIsMissing(car.getModel()))
+			missingFields.add(car.getModel());
+		if (fieldIsMissing(car.getYear()))
+			missingFields.add(car.getYear());
+		return missingFields;
+	}
+
+	private boolean fieldIsMissing(String field) {
+		return Strings.isNullOrEmpty(field);
+	}
+
+	private void printNamesOfAnyMissingFields(List<String> fields) {
+		fields.stream().forEach(field -> System.out.println(String.format("Missing Data Field(s) Detected: %s", field)));
+		if (thereAreFieldsMissing(fields)) {
+			System.err.println("Car data fields missing. Halting execution.");
+			System.exit(1);
+		}
+	}
+
+	private boolean thereAreFieldsMissing(List<String> fields) {
+		return fieldsIsNotEmpty(fields);
+	}
+
+	private boolean fieldsIsNotEmpty(List<String> fields) {
+		return !fields.isEmpty();
+	}
+
+	private Map<PartType, Integer> checkForMissingParts(Car car) {
+		return car.getMissingPartsMap();
+	}
+
+	private void printNamesOfAnyMissingParts(Map<PartType, Integer> map) {
+		for (Map.Entry<PartType, Integer> e : map.entrySet())
+			printMessageIfMissing(e);
+		if (thereAreMissingParts) {
+			System.err.println("Car parts missing. Halting execution.");
+			System.exit(1);
+		}
+	}
+
+	private void printMessageIfMissing(Map.Entry<PartType, Integer> e) {
+		if (partTypeCountGreaterThanZero(e)) {
+			thereAreMissingParts = true;
+			printMissingPart(e.getKey(), e.getValue());
+		}
+	}
+
+	private boolean partTypeCountGreaterThanZero(Map.Entry<PartType, Integer> entry) {
+		return entry.getValue() > 0;
 	}
 
 	private void printMissingPart(PartType partType, Integer count) {
@@ -57,21 +122,8 @@ public class CarDiagnosticEngine {
 	}
 
 	public static void main(String[] args) throws JAXBException {
-		// Load classpath resource
-		InputStream xml = ClassLoader.getSystemResourceAsStream("SampleCar.xml");
 
-		// Verify resource was loaded properly
-		if (xml == null) {
-			System.err.println("An error occurred attempting to load SampleCar.xml");
-
-			System.exit(1);
-		}
-
-		// Build JAXBContext for converting XML into an Object
-		JAXBContext context = JAXBContext.newInstance(Car.class, Part.class);
-		Unmarshaller unmarshaller = context.createUnmarshaller();
-
-		Car car = (Car) unmarshaller.unmarshal(xml);
+		Car car = new CarCreator().createFromXml("SampleCar.xml");
 
 		// Build new Diagnostics Engine and execute on deserialized car object.
 

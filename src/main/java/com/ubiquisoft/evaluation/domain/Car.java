@@ -1,8 +1,12 @@
 package com.ubiquisoft.evaluation.domain;
 
+import static com.ubiquisoft.evaluation.domain.PartType.*;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +21,7 @@ public class Car {
 	private List<Part> parts;
 
 	public Map<PartType, Integer> getMissingPartsMap() {
+
 		/*
 		 * Return map of the part types missing.
 		 *
@@ -24,14 +29,36 @@ public class Car {
 		 *      ENGINE, ELECTRICAL, FUEL_FILTER, OIL_FILTER
 		 * and four of the type: TIRE
 		 *
-		 * Example: a car only missing three of the four tires should return a map like this:
+		 * Example: a car missing three of the four tires should return a map like this:
 		 *
 		 *      {
 		 *          "TIRE": 3
 		 *      }
 		 */
 
-		return null;
+		return createMissingPartsMapFromPartsList();
+	}
+
+	private Map<PartType, Integer> createMissingPartsMapFromPartsList() {
+		Map<PartType, Integer> m = new EnumMap<>(PartType.class);
+		m.put(ENGINE, determineNumberOfMissingPartType(1, ENGINE));
+		m.put(ELECTRICAL, determineNumberOfMissingPartType(1, ELECTRICAL));
+		m.put(FUEL_FILTER, determineNumberOfMissingPartType(1, FUEL_FILTER));
+		m.put(OIL_FILTER, determineNumberOfMissingPartType(1, OIL_FILTER));
+		m.put(TIRE, determineNumberOfMissingPartType(4, TIRE));
+		return m;
+	}
+
+	private int determineNumberOfMissingPartType(int expectedNumber, PartType partType) {
+		return subtractExpectedNumberOfPartTypeFromActual(expectedNumber, partType);
+	}
+
+	private int subtractExpectedNumberOfPartTypeFromActual(int expectedNumber, PartType partType) {
+		return Math.toIntExact(expectedNumber - numberOfPartTypePresentInList(partType));
+	}
+
+	private long numberOfPartTypePresentInList(PartType partType) {
+		return parts.stream().filter(p -> p.getType() == partType).count();
 	}
 
 	@Override
