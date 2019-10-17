@@ -9,9 +9,9 @@ import javax.xml.bind.Unmarshaller;
 import com.ubiquisoft.evaluation.domain.Car;
 import com.ubiquisoft.evaluation.domain.Part;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 
-@Slf4j
+@Log
 public class CarCreator {
     private Car car;
     private InputStream xml;
@@ -31,8 +31,8 @@ public class CarCreator {
 
     private void verifyResourceWasLoadedProperly() {
         if (xml == null) {
-            log.error(ERROR_MSG + ": xml is null.");
-            errorOut();
+            log.severe(ERROR_MSG + ": xml is null.");
+            exitWithError();
         }
     }
 
@@ -47,7 +47,7 @@ public class CarCreator {
         try {
             context = JAXBContext.newInstance(Car.class, Part.class);
         } catch (JAXBException e) {
-            log.error(ERROR_MSG + ": " + e.getMessage());
+            log.severe(ERROR_MSG + ": " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -56,8 +56,8 @@ public class CarCreator {
         try {
             unmarshaller = context.createUnmarshaller();
         } catch (JAXBException e) {
-            log.error(ERROR_MSG + ": " + e.getMessage());
-            errorOut();
+            log.severe(ERROR_MSG + ": " + e.getMessage());
+            exitWithError();
         }
     }
 
@@ -65,12 +65,12 @@ public class CarCreator {
         try {
             car = (Car) unmarshaller.unmarshal(xml);
         } catch (JAXBException e) {
-            log.error(ERROR_MSG + ": " + e.getMessage());
-            errorOut();
+            log.severe(ERROR_MSG + ": " + e.getMessage());
+            exitWithError();
         }
     }
 
-    private void errorOut() {
+    private void exitWithError() {
         System.err.println(ERROR_MSG);
         System.exit(1);
     }

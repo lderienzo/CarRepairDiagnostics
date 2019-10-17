@@ -14,6 +14,9 @@ public class Part {
 
 	private ConditionType condition;
 
+	public boolean isNotInWorkingCondition() {
+		return !isInWorkingCondition();
+	}
 
 	public boolean isInWorkingCondition() {
 		switch (this.condition) {

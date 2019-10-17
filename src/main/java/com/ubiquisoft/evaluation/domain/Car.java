@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -100,7 +101,7 @@ public class Car {
 	}
 
 	public List<Part> getParts() {
-		return parts;
+		return Collections.unmodifiableList(parts);
 	}
 
 	public void setParts(List<Part> parts) {
