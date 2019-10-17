@@ -1,13 +1,16 @@
 package com.ubiquisoft.evaluation;
 
-import com.google.common.base.Strings;
+import static com.ubiquisoft.evaluation.enums.ExitCode.ERROR;
+import static com.ubiquisoft.evaluation.enums.ExitCode.OK;
+
 import com.ubiquisoft.evaluation.domain.Car;
 import com.ubiquisoft.evaluation.domain.ConditionType;
 import com.ubiquisoft.evaluation.domain.Part;
 import com.ubiquisoft.evaluation.domain.PartType;
+import com.ubiquisoft.evaluation.domain.validation.MissingCarDataFieldValidator;
 import com.ubiquisoft.evaluation.domain.xml.unmarshaller.CarCreator;
+import com.ubiquisoft.evaluation.enums.ExitCode;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -15,18 +18,21 @@ import java.util.Map;
 
 
 public class CarDiagnosticEngine {
-	private static final String ENDING_DIAGNOSTICS_EARLY_MSG = "Diagnostics halted early.";
+	public static final String MISSING_DATA_FIELDS_ERROR_MSG = "Car has missing data fields.";
+	public static final String ENDING_DIAGNOSTICS_EARLY_MSG = "Diagnostics halted early.";
 	private boolean thereAreMissingParts = false;
 	private boolean thereAreDamagedParts = false;
 
-	public void executeDiagnostics(Car car) {
+	private MissingCarDataFieldValidator missingDataFieldValidator = new MissingCarDataFieldValidator();
+
+	public ExitCode executeDiagnostics(Car car) {
 		/*
 		 * Implement basic diagnostics and print results to console.
 		 *
 		 * The purpose of this method is to find any problems with a car's data or parts.
 		 *
 		 * Diagnostic Steps:
-		 *      First   - Validate the 3 data fields are present, if one or more are
+		 *      First   - Validate the 3 data fields are present, if one or more are missing
 		 *                then print the missing fields to the console
 		 *                in a similar manner to how the provided methods do.
 		 *
@@ -47,9 +53,7 @@ public class CarDiagnosticEngine {
 		 */
 
 		System.out.println("Beginning Diagnostics...");
-
-		List<String> missingDataFields = checkForMissingFields(car);
-		printNamesOfAnyMissingFields(missingDataFields);
+		if (checkForMissingDataFields(car) == ERROR) return ERROR;
 		System.out.println("Car data field check complete.");
 
 		Map<PartType, Integer> missingPartsMap = checkForMissingParts(car);
@@ -61,29 +65,23 @@ public class CarDiagnosticEngine {
 		System.out.println("Car damaged part check complete.");
 
 		System.out.println("Diagnostic check on car complete.");
+
+		return OK;
 	}
 
-	private List<String> checkForMissingFields(Car car) {
-		List<String> missingFields = new ArrayList<>();;
-		if (fieldIsMissing(car.getMake()))
-			missingFields.add(car.getMake());
-		if (fieldIsMissing(car.getModel()))
-			missingFields.add(car.getModel());
-		if (fieldIsMissing(car.getYear()))
-			missingFields.add(car.getYear());
-		return missingFields;
-	}
-
-	private boolean fieldIsMissing(String field) {
-		return Strings.isNullOrEmpty(field);
-	}
-
-	private void printNamesOfAnyMissingFields(List<String> fields) {
-		fields.stream().forEach(field -> System.out.println(String.format("Missing Data Field(s) Detected: %s", field)));
+	private ExitCode checkForMissingDataFields(Car car) {
+		List<String> fields = missingDataFieldValidator.findMissingFields(car);
 		if (thereAreFieldsMissing(fields)) {
-			System.err.println("Car has missing data. " + ENDING_DIAGNOSTICS_EARLY_MSG);
-			System.exit(1);
+			printMissingFields();
+			return ERROR;
 		}
+		return OK;
+	}
+
+	private void printMissingFields() {
+		System.err.println(MISSING_DATA_FIELDS_ERROR_MSG);
+		missingDataFieldValidator.printMissingFields();
+		System.err.println(ENDING_DIAGNOSTICS_EARLY_MSG);
 	}
 
 	private boolean thereAreFieldsMissing(List<String> fields) {
@@ -163,11 +161,16 @@ public class CarDiagnosticEngine {
 
 	public static void main(String[] args) {
 		Car car = new CarCreator().createFromXml("SampleCar.xml");
-		runDiagnosticCheckOnCar(car);
+		if (runDiagnosticCheckOnCar(car) == ERROR)
+			haltProgramEarly();
 	}
 
-	private static void runDiagnosticCheckOnCar(Car car) {
+	private static ExitCode runDiagnosticCheckOnCar(Car car) {
 		CarDiagnosticEngine diagnosticEngine = new CarDiagnosticEngine();
-		diagnosticEngine.executeDiagnostics(car);
+		return diagnosticEngine.executeDiagnostics(car);
+	}
+
+	private static void haltProgramEarly() {
+		System.exit(1);
 	}
 }
