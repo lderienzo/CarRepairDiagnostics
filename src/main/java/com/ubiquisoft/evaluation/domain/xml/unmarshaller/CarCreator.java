@@ -8,70 +8,45 @@ import javax.xml.bind.Unmarshaller;
 
 import com.ubiquisoft.evaluation.domain.Car;
 import com.ubiquisoft.evaluation.domain.Part;
+import com.ubiquisoft.evaluation.exception.CarCreatorException;
 
-import lombok.extern.java.Log;
 
-@Log
 public class CarCreator {
-    private Car car;
-    private InputStream xml;
-    private JAXBContext context;
-    private Unmarshaller unmarshaller;
-    private static final String ERROR_MSG = "An error occurred attempting to load SampleCar.xml";
+    private static final String ERROR_MSG = "Error constructing car from xml.";
 
     public Car createFromXml(String xmlFile) {
-        loadClasspathResource(xmlFile);
-        verifyResourceWasLoadedProperly();
-        return createCar();
+        InputStream xml = readXmlFileDataIntoInputStream(xmlFile);
+        verifyInputStreamIsValid(xml);
+        return createCarFromXmlInput(xml);
     }
 
-    private void loadClasspathResource(String xmlFile) {
-        xml = ClassLoader.getSystemResourceAsStream(xmlFile);
+    private InputStream readXmlFileDataIntoInputStream(String xmlFile) {
+        return ClassLoader.getSystemResourceAsStream(xmlFile);
     }
 
-    private void verifyResourceWasLoadedProperly() {
-        if (xml == null) {
-            log.severe(ERROR_MSG + ": xml is null.");
-            exitWithError();
-        }
+    private void verifyInputStreamIsValid(InputStream xml) {
+        if (xml == null) throw new CarCreatorException(ERROR_MSG + ": xml is null.");
     }
 
-    private Car createCar() {
-        buildJAXBContextForConvertingXMLIntoObject();
-        createUnmarshallerFromContext(context);
-        useUnmarshallerToCreateCar(unmarshaller);
-        return car;
-    }
-
-    private void buildJAXBContextForConvertingXMLIntoObject() {
+    private Car createCarFromXmlInput(InputStream xml) {
         try {
-            context = JAXBContext.newInstance(Car.class, Part.class);
+            JAXBContext context = buildJAXBContextForConvertingXMLIntoObject();
+            Unmarshaller unmarshaller = createUnmarshallerFromContext(context);
+            return unmarshallCarFromXml(xml, unmarshaller);
         } catch (JAXBException e) {
-            log.severe(ERROR_MSG + ": " + e.getMessage());
-            throw new RuntimeException(e);
+            throw new CarCreatorException(ERROR_MSG, e);
         }
     }
 
-    private void createUnmarshallerFromContext(JAXBContext context) {
-        try {
-            unmarshaller = context.createUnmarshaller();
-        } catch (JAXBException e) {
-            log.severe(ERROR_MSG + ": " + e.getMessage());
-            exitWithError();
-        }
+    private JAXBContext buildJAXBContextForConvertingXMLIntoObject() throws JAXBException {
+        return JAXBContext.newInstance(Car.class, Part.class);
     }
 
-    private void useUnmarshallerToCreateCar(Unmarshaller unmarshaller) {
-        try {
-            car = (Car) unmarshaller.unmarshal(xml);
-        } catch (JAXBException e) {
-            log.severe(ERROR_MSG + ": " + e.getMessage());
-            exitWithError();
-        }
+    private Unmarshaller createUnmarshallerFromContext(JAXBContext context) throws JAXBException {
+        return context.createUnmarshaller();
     }
 
-    private void exitWithError() {
-        System.err.println(ERROR_MSG);
-        System.exit(1);
+    private Car unmarshallCarFromXml(InputStream xml, Unmarshaller unmarshaller) throws JAXBException {
+        return (Car) unmarshaller.unmarshal(xml);
     }
 }
