@@ -1,5 +1,6 @@
 package com.ubiquisoft.evaluation;
 
+import static com.ubiquisoft.evaluation.domain.Car.PART_TYPE_MUST_NOT_BE_NULL_MSG;
 import static com.ubiquisoft.evaluation.enums.ExitCode.ERROR;
 import static com.ubiquisoft.evaluation.enums.ExitCode.OK;
 
@@ -7,6 +8,7 @@ import com.ubiquisoft.evaluation.domain.Car;
 import com.ubiquisoft.evaluation.domain.ConditionType;
 import com.ubiquisoft.evaluation.domain.Part;
 import com.ubiquisoft.evaluation.domain.PartType;
+import com.ubiquisoft.evaluation.domain.output.MissingCarPartPrinter;
 import com.ubiquisoft.evaluation.domain.validation.MissingCarDataFieldValidator;
 import com.ubiquisoft.evaluation.domain.xml.unmarshaller.CarCreator;
 import com.ubiquisoft.evaluation.enums.ExitCode;
@@ -18,12 +20,22 @@ import java.util.Map;
 
 
 public class CarDiagnosticEngine {
+
+	public static final String BEGIN_DIAGNOSTICS_MSG = "Beginning Car Diagnostics...";
+	public static final String BEGIN_CHECK_DATA_FIELDS_MSG = "Begin missing data field check...";
+	public static final String END_CHECK_DATA_FIELDS_MSG = "Data field check complete.";
 	public static final String MISSING_DATA_FIELDS_ERROR_MSG = "Car has missing data fields.";
-	public static final String ENDING_DIAGNOSTICS_EARLY_MSG = "Diagnostics halted early.";
+	public static final String BEGIN_CHECK_MISSING_PARTS_MSG = "Begin missing part check...";
+	public static final String END_CHECK_MISSING_PARTS_MSG = "Missing part check complete.";
+	public static final String MISSING_PARTS_ERROR_MSG = "Car has missing parts. ";
+
+	private static final String ENDING_DIAGNOSTICS_EARLY_MSG = "Diagnostics halted early.";
 	private boolean thereAreMissingParts = false;
 	private boolean thereAreDamagedParts = false;
 
 	private MissingCarDataFieldValidator missingDataFieldValidator = new MissingCarDataFieldValidator();
+	private MissingCarPartPrinter missingPartPrinter;
+
 
 	public ExitCode executeDiagnostics(Car car) {
 		/*
@@ -52,19 +64,21 @@ public class CarDiagnosticEngine {
 		 * console output is as least as informative as the provided methods.
 		 */
 
-		System.out.println("Beginning Diagnostics...");
-		if (checkForMissingDataFields(car) == ERROR) return ERROR;
-		System.out.println("Car data field check complete.");
+		System.out.println(BEGIN_DIAGNOSTICS_MSG);
 
-		Map<PartType, Integer> missingPartsMap = checkForMissingParts(car);
-		printNamesOfAnyMissingParts(missingPartsMap);
-		System.out.println("Car missing part check complete.");
+		System.out.println(BEGIN_CHECK_DATA_FIELDS_MSG);
+		if (checkForMissingDataFields(car) == ERROR) return ERROR;
+		System.out.println(END_CHECK_DATA_FIELDS_MSG);
+
+		System.out.println(BEGIN_CHECK_MISSING_PARTS_MSG);
+		if (checkForMissingParts(car) == ERROR) return ERROR;
+		System.out.println(END_CHECK_MISSING_PARTS_MSG);
 
 		Map<PartType, ConditionType> damagedPartMap = checkForDamagedParts(car);
 		printDamagedParts(damagedPartMap);
 		System.out.println("Car damaged part check complete.");
 
-		System.out.println("Diagnostic check on car complete.");
+		System.out.println("Diagnostic check on car complete. All checks successful. Car is A-OK.");
 
 		return OK;
 	}
@@ -81,7 +95,6 @@ public class CarDiagnosticEngine {
 	private void printMissingFields() {
 		System.err.println(MISSING_DATA_FIELDS_ERROR_MSG);
 		missingDataFieldValidator.printMissingFields();
-		System.err.println(ENDING_DIAGNOSTICS_EARLY_MSG);
 	}
 
 	private boolean thereAreFieldsMissing(List<String> fields) {
@@ -92,35 +105,14 @@ public class CarDiagnosticEngine {
 		return !fields.isEmpty();
 	}
 
-	private Map<PartType, Integer> checkForMissingParts(Car car) {
-		return car.getMissingPartsMap();
-	}
-
-	private void printNamesOfAnyMissingParts(Map<PartType, Integer> map) {
-		for (Map.Entry<PartType, Integer> partAndNumberMissing : map.entrySet())
-			printMessageIfPartIsMissing(partAndNumberMissing);
-		if (thereAreMissingParts) {
-			System.err.println("Car has missing parts. " + ENDING_DIAGNOSTICS_EARLY_MSG);
-			System.exit(1);
+	private ExitCode checkForMissingParts(Car car) {
+		missingPartPrinter = new MissingCarPartPrinter(car);
+		if (missingPartPrinter.partsMissing()) {
+			System.err.println(MISSING_PARTS_ERROR_MSG);
+			missingPartPrinter.printMissingParts();
+			return ERROR;
 		}
-	}
-
-	private void printMessageIfPartIsMissing(Map.Entry<PartType, Integer> e) {
-		if (numberMissingGreaterThanZero(e.getValue())) {
-			thereAreMissingParts = true;
-			printMissingPart(e.getKey(), e.getValue());
-		}
-	}
-
-	private boolean numberMissingGreaterThanZero(Integer numberMissing) {
-		return numberMissing > 0;
-	}
-
-	private void printMissingPart(PartType partType, Integer count) {
-		if (partType == null) throw new IllegalArgumentException("PartType must not be null");
-		if (count == null || count <= 0) throw new IllegalArgumentException("Count must be greater than 0");
-
-		System.out.println(String.format("Missing Part(s) Detected: %s - Count: %s", partType, count));
+		return OK;
 	}
 
 	private Map<PartType, ConditionType> checkForDamagedParts(Car car) {
@@ -153,7 +145,7 @@ public class CarDiagnosticEngine {
 	}
 
 	private void printDamagedPart(PartType partType, ConditionType condition) {
-		if (partType == null) throw new IllegalArgumentException("PartType must not be null");
+		if (partType == null) throw new IllegalArgumentException(PART_TYPE_MUST_NOT_BE_NULL_MSG);
 		if (condition == null) throw new IllegalArgumentException("ConditionType must not be null");
 
 		System.out.println(String.format("Damaged Part Detected: %s - Condition: %s", partType, condition));
@@ -171,6 +163,7 @@ public class CarDiagnosticEngine {
 	}
 
 	private static void haltProgramEarly() {
+		System.err.println(ENDING_DIAGNOSTICS_EARLY_MSG);
 		System.exit(1);
 	}
 }

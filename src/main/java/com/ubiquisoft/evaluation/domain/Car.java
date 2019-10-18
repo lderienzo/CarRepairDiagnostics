@@ -18,8 +18,9 @@ public class Car {
 	private String year;
 	private String make;
 	private String model;
-
 	private List<Part> parts;
+	private Map<PartType, Integer> missingPartsMap = new EnumMap<>(PartType.class);
+	public static final String PART_TYPE_MUST_NOT_BE_NULL_MSG = "PartType must not be null";
 
 	public Map<PartType, Integer> getMissingPartsMap() {
 
@@ -36,29 +37,27 @@ public class Car {
 		 *          "TIRE": 3
 		 *      }
 		 */
-
-		return createMissingPartsMapFromPartsList();
+		createMissingPartsMapFromPartsList();
+		return missingPartsMap;
 	}
 
-	private Map<PartType, Integer> createMissingPartsMapFromPartsList() {
-		Map<PartType, Integer> m = new EnumMap<>(PartType.class);
-		m.put(ENGINE, determineNumberOfMissingPartType(1, ENGINE));
-		m.put(ELECTRICAL, determineNumberOfMissingPartType(1, ELECTRICAL));
-		m.put(FUEL_FILTER, determineNumberOfMissingPartType(1, FUEL_FILTER));
-		m.put(OIL_FILTER, determineNumberOfMissingPartType(1, OIL_FILTER));
-		m.put(TIRE, determineNumberOfMissingPartType(4, TIRE));
-		return m;
+	private void createMissingPartsMapFromPartsList() {
+		missingPartsMap.put(ENGINE, determineNumberMissingOfSpecificPartType(1, ENGINE));
+		missingPartsMap.put(ELECTRICAL, determineNumberMissingOfSpecificPartType(1, ELECTRICAL));
+		missingPartsMap.put(FUEL_FILTER, determineNumberMissingOfSpecificPartType(1, FUEL_FILTER));
+		missingPartsMap.put(OIL_FILTER, determineNumberMissingOfSpecificPartType(1, OIL_FILTER));
+		missingPartsMap.put(TIRE, determineNumberMissingOfSpecificPartType(4, TIRE));
 	}
 
-	private int determineNumberOfMissingPartType(int expectedNumber, PartType partType) {
-		return subtractExpectedNumberOfPartTypeFromActual(expectedNumber, partType);
+	private int determineNumberMissingOfSpecificPartType(int shouldHave, PartType partType) {
+		return subtractNumberShouldHaveFromActual(shouldHave, partType);
 	}
 
-	private int subtractExpectedNumberOfPartTypeFromActual(int expectedNumber, PartType partType) {
-		return Math.toIntExact(expectedNumber - numberOfPartTypePresentInList(partType));
+	private int subtractNumberShouldHaveFromActual(int shouldHave, PartType partType) {
+		return Math.toIntExact(shouldHave - actualNumberPresent(partType));
 	}
 
-	private long numberOfPartTypePresentInList(PartType partType) {
+	private long actualNumberPresent(PartType partType) {
 		return parts.stream().filter(p -> p.getType() == partType).count();
 	}
 
