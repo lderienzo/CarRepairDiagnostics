@@ -23,16 +23,17 @@ public class CarDiagnosticEngine {
 	private MissingCarDataFieldValidator missingDataFieldValidator = new MissingCarDataFieldValidator();
 	private DamagedCarPartValidator damagedCarPartValidator = new DamagedCarPartValidator();
 	private MissingCarPartPrinter missingPartPrinter;
-	public static final String BEGIN_DIAGNOSTICS_MSG = "Beginning Car Diagnostics...";
+	public static final String BEGIN_DIAGNOSTICS_MSG = "Beginning Car Diagnostics...\n";
 	public static final String BEGIN_CHECK_DATA_FIELDS_MSG = "Begin missing data field check...";
-	public static final String END_CHECK_DATA_FIELDS_MSG = "Data field check complete.";
+	public static final String END_CHECK_DATA_FIELDS_MSG = "Data field check complete.\n";
 	public static final String MISSING_DATA_FIELDS_ERROR_MSG = "Car has missing data fields.";
 	public static final String BEGIN_CHECK_MISSING_PARTS_MSG = "Begin missing part check...";
-	public static final String END_CHECK_MISSING_PARTS_MSG = "Missing part check complete.";
+	public static final String END_CHECK_MISSING_PARTS_MSG = "Missing part check complete.\n";
 	public static final String MISSING_PARTS_ERROR_MSG = "Car has missing parts. ";
 	public static final String BEGIN_CHECK_DAMAGED_PARTS_MSG = "Begin damaged parts check...";
-	public static final String END_CHECK_DAMAGED_PARTS_MSG = "Damaged parts check complete.";
+	public static final String END_CHECK_DAMAGED_PARTS_MSG = "Damaged parts check complete.\n";
 	public static final String DAMAGED_PARTS_ERROR_MSG = "Car has damaged parts. ";
+	public static final String END_DIAGNOSTICS_SUCCESSFUL_MSG = "All diagnostic checks on car completed.\nCar is \"A-OK.\"";
 
 	public ExitCode executeDiagnostics(Car car) {
 		/*
@@ -62,29 +63,21 @@ public class CarDiagnosticEngine {
 		 */
 
 		System.out.println(BEGIN_DIAGNOSTICS_MSG);
-
-		System.out.println(BEGIN_CHECK_DATA_FIELDS_MSG);
 		if (checkForMissingDataFields(car) == ERROR) return ERROR;
-		System.out.println(END_CHECK_DATA_FIELDS_MSG);
-
-		System.out.println(BEGIN_CHECK_MISSING_PARTS_MSG);
 		if (checkForMissingParts(car) == ERROR) return ERROR;
-		System.out.println(END_CHECK_MISSING_PARTS_MSG);
-
-		System.out.println(BEGIN_CHECK_DAMAGED_PARTS_MSG);
 		if (checkForDamagedParts(car) == ERROR) return ERROR;
-		System.out.println(END_CHECK_DAMAGED_PARTS_MSG);
-
-		System.out.println("Diagnostic check on car complete. All checks successful. Car is A-OK.");
+		System.out.println(END_DIAGNOSTICS_SUCCESSFUL_MSG);
 		return OK;
 	}
 
 	private ExitCode checkForMissingDataFields(Car car) {
+		System.out.println(BEGIN_CHECK_DATA_FIELDS_MSG);
 		List<String> fields = missingDataFieldValidator.findMissingFields(car);
 		if (thereAreFieldsMissing(fields)) {
 			printMissingFields();
 			return ERROR;
 		}
+		System.out.println(END_CHECK_DATA_FIELDS_MSG);
 		return OK;
 	}
 
@@ -102,22 +95,26 @@ public class CarDiagnosticEngine {
 	}
 
 	private ExitCode checkForMissingParts(Car car) {
+		System.out.println(BEGIN_CHECK_MISSING_PARTS_MSG);
 		missingPartPrinter = new MissingCarPartPrinter(car);
 		if (missingPartPrinter.partsMissing()) {
 			System.err.println(MISSING_PARTS_ERROR_MSG);
 			missingPartPrinter.printMissingParts();
 			return ERROR;
 		}
+		System.out.println(END_CHECK_MISSING_PARTS_MSG);
 		return OK;
 	}
 
 	private ExitCode checkForDamagedParts(Car car) {
+		System.out.println(BEGIN_CHECK_DAMAGED_PARTS_MSG);
 		Map<PartType, ConditionType> damagedPartsMap = damagedCarPartValidator.getDamagedPartsMap(car);
 		if (thereAreDamagedParts(damagedPartsMap)) {
 			System.err.println(DAMAGED_PARTS_ERROR_MSG);
 			damagedCarPartValidator.printDamagedParts();
 			return ERROR;
 		}
+		System.out.println(END_CHECK_DAMAGED_PARTS_MSG);
 		return OK;
 	}
 

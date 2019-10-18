@@ -4,7 +4,7 @@ import static com.ubiquisoft.evaluation.CarDiagnosticEngine.*;
 import static com.ubiquisoft.evaluation.domain.output.MissingCarPartPrinter.MISSING_PART_DETECTED_MSG;
 import static com.ubiquisoft.evaluation.domain.validation.DamagedCarPartValidator.DAMAGED_PART_DETECTED_MSG;
 import static com.ubiquisoft.evaluation.domain.validation.MissingCarDataFieldValidator.MISSING_DATA_FIELD_MSG;
-import static com.ubiquisoft.evaluation.enums.ExitCode.ERROR;
+import static com.ubiquisoft.evaluation.enums.ExitCode.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 import java.io.ByteArrayOutputStream;
@@ -21,13 +21,15 @@ import com.ubiquisoft.evaluation.enums.ExitCode;
 public class CarDiagnosticEngineTest {
 
     private static CarDiagnosticEngine diagnosticEngine;
-    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-    private PrintStream sysErr;
+    private static final String VALID_XML = "SampleCar-all-diagnostics-valid.xml";
 
     // TODO - BELOW REPEATED
     private static final String INVALID_XML_MISSING_DATA_FIELDS = "SampleCar-missing-data-fields.xml";
     private static final String INVALID_XML_MISSING_PARTS = "SampleCar-incomplete-parts-list.xml";
     private static final String INVALID_XML_DAMAGED_PARTS = "SampleCar.xml"; // TODO -- REPEATED damaged parts
+
+    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+    private PrintStream sysErr;
     private static CarCreator carCreator = new CarCreator();
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private PrintStream sysOut;
@@ -97,6 +99,22 @@ public class CarDiagnosticEngineTest {
                 DAMAGED_PART_DETECTED_MSG + " ELECTRICAL - Condition: NO_POWER\n" +
                 DAMAGED_PART_DETECTED_MSG + " TIRE - Condition: FLAT\n" +
                 DAMAGED_PART_DETECTED_MSG + " OIL_FILTER - Condition: CLOGGED\n");
+    }
+
+    @Test
+    public void whenAllAspectsOfXmlValidThenDiagnosticsCompleted() {
+        // given
+        diagnosticEngine = new CarDiagnosticEngine();
+        Car car = carCreator.createFromXml(VALID_XML);
+        // when
+        ExitCode exitCode = diagnosticEngine.executeDiagnostics(car);
+        // then
+        assertThat(exitCode).isEqualTo(OK);
+        assertThat(outContent.toString()).isEqualTo(BEGIN_DIAGNOSTICS_MSG + "\n" +
+                BEGIN_CHECK_DATA_FIELDS_MSG + "\n" + END_CHECK_DATA_FIELDS_MSG + "\n" +
+                BEGIN_CHECK_MISSING_PARTS_MSG + "\n" + END_CHECK_MISSING_PARTS_MSG + "\n" +
+                BEGIN_CHECK_DAMAGED_PARTS_MSG + "\n" + END_CHECK_DAMAGED_PARTS_MSG + "\n" +
+                END_DIAGNOSTICS_SUCCESSFUL_MSG + "\n");
     }
 
 }
