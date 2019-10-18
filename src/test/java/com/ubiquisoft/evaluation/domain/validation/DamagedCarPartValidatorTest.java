@@ -3,9 +3,9 @@ package com.ubiquisoft.evaluation.domain.validation;
 import static com.ubiquisoft.evaluation.domain.ConditionType.*;
 import static com.ubiquisoft.evaluation.domain.PartType.*;
 import static com.ubiquisoft.evaluation.domain.validation.DamagedCarPartValidator.DAMAGED_PART_DETECTED_MSG;
+import static com.ubiquisoft.evaluation.utils.TestConstants.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.EnumMap;
 import java.util.Map;
@@ -15,22 +15,16 @@ import org.junit.jupiter.api.Test;
 import com.ubiquisoft.evaluation.domain.Car;
 import com.ubiquisoft.evaluation.domain.ConditionType;
 import com.ubiquisoft.evaluation.domain.PartType;
-import com.ubiquisoft.evaluation.domain.xml.unmarshaller.CarCreator;
+import com.ubiquisoft.evaluation.utils.CommonTestMembers;
 
-public class DamagedCarPartValidatorTest {
+public class DamagedCarPartValidatorTest extends CommonTestMembers {
 
-    private static final String VALID_XML_FILE = "SampleCar-all-diagnostics-valid.xml";
-    private static final String INVALID_XML_FILE = "SampleCar.xml";
     private DamagedCarPartValidator damagedCarPartValidator = new DamagedCarPartValidator();
-    // TODO - BELOW REPEATED
-    private static CarCreator carCreator = new CarCreator();
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private PrintStream sysOut;
 
     @Test
     public void whenNoDamagedPartsThenDamagedPartMapEmpty() {
         // given
-        Car car = carCreator.createFromXml(VALID_XML_FILE);
+        Car car = CAR_CREATOR.createFromXml(VALID_XML);
         // when
         Map<PartType, ConditionType> damagedPartsMap = damagedCarPartValidator.getDamagedPartsMap(car);
         // then
@@ -40,7 +34,7 @@ public class DamagedCarPartValidatorTest {
     @Test
     public void whenDamagedPartsThenDamagedPartMapNotEmpty() {
         // given
-        Car car = carCreator.createFromXml(INVALID_XML_FILE);
+        Car car = CAR_CREATOR.createFromXml(INVALID_XML_DAMAGED_PARTS);
         // when
         Map<PartType, ConditionType> damagedPartsMap = damagedCarPartValidator.getDamagedPartsMap(car);
         // then
@@ -60,32 +54,22 @@ public class DamagedCarPartValidatorTest {
     @Test
     public void whenNoDamagedPartsThenNoPartsPrinted() {
         // given
-        revertStreams();
-        setUpStreams();
-        Car car = carCreator.createFromXml(VALID_XML_FILE);
+        setUpSysOutStream();
+        Car car = CAR_CREATOR.createFromXml(VALID_XML);
         damagedCarPartValidator.getDamagedPartsMap(car);
         // when
         damagedCarPartValidator.printDamagedParts();
         // then
         assertThat(outContent.toString()).isEmpty();
-    }
 
-    // TODO - REPEATED
-    public void revertStreams() {
-        System.setOut(sysOut);
-    }
-    // TODO - REPEATED
-    private void setUpStreams() {
-        sysOut = System.out;
-        System.setOut(new PrintStream(outContent));
+        revertSysOutStream();
     }
 
     @Test
     public void whenDamagedPartsThenPartsPrinted() {
         // given
-        revertStreams();
-        setUpStreams();
-        Car car = carCreator.createFromXml(INVALID_XML_FILE);
+        setUpSysOutStream();
+        Car car = CAR_CREATOR.createFromXml(INVALID_XML_DAMAGED_PARTS);
         damagedCarPartValidator.getDamagedPartsMap(car);
         // when
         damagedCarPartValidator.printDamagedParts();
@@ -94,5 +78,7 @@ public class DamagedCarPartValidatorTest {
                 DAMAGED_PART_DETECTED_MSG + " ELECTRICAL - Condition: NO_POWER\n" +
                 DAMAGED_PART_DETECTED_MSG + " TIRE - Condition: FLAT\n" +
                 DAMAGED_PART_DETECTED_MSG + " OIL_FILTER - Condition: CLOGGED\n");
+
+        revertSysOutStream();
     }
 }
