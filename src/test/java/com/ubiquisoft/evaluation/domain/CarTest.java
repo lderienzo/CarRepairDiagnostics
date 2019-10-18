@@ -10,10 +10,10 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-public class CarTest {
+class CarTest {
 
     @Test
-    public void whenCarXmlContainsAllPartsThenAllValuesOfMissingPartsMapAreZero() {
+    void whenCarXmlContainsAllPartsThenAllValuesOfMissingPartsMapAreZero() {
         // given
         Car car = CAR_CREATOR.createFromXml(VALID_XML);
         // when/then
@@ -26,7 +26,7 @@ public class CarTest {
     }
 
     @Test
-    public void whenCarXmlIsMissingPartsThenMissingPartsMapContainsNonZeroValuesForPartsMissing() {
+    void whenCarXmlIsMissingPartsThenMissingPartsMapContainsNonZeroValuesForPartsMissing() {
         // given
         Car car = CAR_CREATOR.createFromXml(INVALID_XML_MISSING_PARTS);
         // when/then

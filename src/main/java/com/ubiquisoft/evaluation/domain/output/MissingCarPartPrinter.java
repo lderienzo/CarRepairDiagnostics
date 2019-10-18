@@ -10,7 +10,7 @@ import com.ubiquisoft.evaluation.domain.PartType;
 public final class MissingCarPartPrinter {
 
     public static final String MISSING_PART_DETECTED_MSG = "Missing Part(s) Detected:";
-    private Map<PartType, Integer> missingPartsMap;
+    private final Map<PartType, Integer> missingPartsMap;
 
     public MissingCarPartPrinter(Car car) {
         this.missingPartsMap = car.getMissingPartsMap();
@@ -35,21 +35,18 @@ public final class MissingCarPartPrinter {
     }
 
     public void printMissingParts() {
-        if (partsMissing()) {
+        if (partsMissing())
             printEachMissingPart();
-        }
     }
 
-    public void printEachMissingPart() {
-        for (Map.Entry<PartType, Integer> e : missingPartsMap.entrySet()) {
+    private void printEachMissingPart() {
+        for (Map.Entry<PartType, Integer> e : missingPartsMap.entrySet())
             onlyPrintCountsOfMissingParts(e);
-        }
     }
 
     private void onlyPrintCountsOfMissingParts(Map.Entry<PartType, Integer> e) {
-        if (missingCount(e) > 0) {
+        if (missingCount(e) > 0)
             printMissingPart(partType(e), missingCount(e));
-        }
     }
 
     private PartType partType(Map.Entry<PartType, Integer> e) {

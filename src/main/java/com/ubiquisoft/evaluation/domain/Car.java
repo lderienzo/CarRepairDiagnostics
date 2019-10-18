@@ -13,30 +13,16 @@ import java.util.Map;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Car {
+public final class Car {
 
 	private String year;
 	private String make;
 	private String model;
 	private List<Part> parts;
-	private Map<PartType, Integer> missingPartsMap = new EnumMap<>(PartType.class);
+	private final Map<PartType, Integer> missingPartsMap = new EnumMap<>(PartType.class);
 	public static final String PART_TYPE_MUST_NOT_BE_NULL_MSG = "PartType must not be null";
 
 	public Map<PartType, Integer> getMissingPartsMap() {
-
-		/*
-		 * Return map of the part types missing.
-		 *
-		 * Each car requires one of each of the following types:
-		 *      ENGINE, ELECTRICAL, FUEL_FILTER, OIL_FILTER
-		 * and four of the type: TIRE
-		 *
-		 * Example: a car missing three of the four tires should return a map like this:
-		 *
-		 *      {
-		 *          "TIRE": 3
-		 *      }
-		 */
 		createMissingPartsMapFromPartsList();
 		return missingPartsMap;
 	}

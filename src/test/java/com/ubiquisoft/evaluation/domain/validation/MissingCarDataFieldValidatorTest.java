@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test;
 import com.ubiquisoft.evaluation.domain.Car;
 import com.ubiquisoft.evaluation.utils.CommonTestMembers;
 
-public class MissingCarDataFieldValidatorTest extends CommonTestMembers {
+class MissingCarDataFieldValidatorTest extends CommonTestMembers {
 
-    private MissingCarDataFieldValidator validator = new MissingCarDataFieldValidator();
+    private final MissingCarDataFieldValidator validator = new MissingCarDataFieldValidator();
 
     @Test
-    public void whenAllFieldsPresentThenValidWithEmptyList() {
+    void whenAllFieldsPresentThenValidWithEmptyList() {
         // given
         Car car = CAR_CREATOR.createFromXml(VALID_XML);
         // when
@@ -26,7 +26,7 @@ public class MissingCarDataFieldValidatorTest extends CommonTestMembers {
     }
 
     @Test
-    public void whenMissingFieldThenInvalidWithNonEmptyList() {
+    void whenMissingFieldThenInvalidWithNonEmptyList() {
         // given
         Car car = CAR_CREATOR.createFromXml(INVALID_XML_MISSING_DATA_FIELDS);
         // when
@@ -37,7 +37,7 @@ public class MissingCarDataFieldValidatorTest extends CommonTestMembers {
     }
 
     @Test
-    public void whenNoMissingFieldsThenNoneToPrint() {
+    void whenNoMissingFieldsThenNoneToPrint() {
         // given
         setUpSysOutStream();
         Car car = CAR_CREATOR.createFromXml(VALID_XML);
@@ -51,7 +51,7 @@ public class MissingCarDataFieldValidatorTest extends CommonTestMembers {
     }
 
     @Test
-    public void whenMissingFieldsThenFieldsToPrint() {
+    void whenMissingFieldsThenFieldsToPrint() {
         // given
         setUpSysOutStream();
         Car car = CAR_CREATOR.createFromXml(INVALID_XML_MISSING_DATA_FIELDS);

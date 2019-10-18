@@ -5,8 +5,8 @@ import java.io.PrintStream;
 
 public class CommonTestMembers {
 
-    protected ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    protected PrintStream sysOut;
+    protected final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private PrintStream sysOut;
 
     protected void setUpSysOutStream() {
         sysOut = System.out;
@@ -16,5 +16,4 @@ public class CommonTestMembers {
     protected void revertSysOutStream() {
         System.setOut(sysOut);
     }
-
 }

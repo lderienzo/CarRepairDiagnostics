@@ -1,7 +1,6 @@
 package com.ubiquisoft.evaluation;
 
 import static com.ubiquisoft.evaluation.CarDiagnosticEngine.*;
-import static com.ubiquisoft.evaluation.domain.output.MissingCarPartPrinter.MISSING_PART_DETECTED_MSG;
 import static com.ubiquisoft.evaluation.domain.validation.DamagedCarPartValidator.DAMAGED_PART_DETECTED_MSG;
 import static com.ubiquisoft.evaluation.domain.validation.MissingCarDataFieldValidator.MISSING_DATA_FIELD_MSG;
 import static com.ubiquisoft.evaluation.enums.ExitCode.*;
@@ -19,27 +18,27 @@ import com.ubiquisoft.evaluation.domain.Car;
 import com.ubiquisoft.evaluation.enums.ExitCode;
 import com.ubiquisoft.evaluation.utils.CommonTestMembers;
 
-public class CarDiagnosticEngineTest extends CommonTestMembers {
+class CarDiagnosticEngineTest extends CommonTestMembers {
 
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     private static CarDiagnosticEngine diagnosticEngine;
     private PrintStream sysErr;
 
     @BeforeEach
-    public void setUpStreams() {
+    void setUpStreams() {
         setUpSysOutStream();
         sysErr = System.err;
         System.setErr(new PrintStream(errContent));
     }
 
     @AfterEach
-    public void revertStreams() {
+    void revertStreams() {
         revertSysOutStream();
         System.setErr(sysErr);
     }
 
     @Test
-    public void whenMissingFieldsThenPrintedToConsoleWithEarlyTermination() {
+    void whenMissingFieldsThenPrintedToConsoleWithEarlyTermination() {
         // given
         diagnosticEngine = new CarDiagnosticEngine();
         Car car = CAR_CREATOR.createFromXml(INVALID_XML_MISSING_DATA_FIELDS);
@@ -53,7 +52,7 @@ public class CarDiagnosticEngineTest extends CommonTestMembers {
     }
 
     @Test
-    public void whenMissingPartsThenPrintedToConsoleWithEarlyTermination() {
+    void whenMissingPartsThenPrintedToConsoleWithEarlyTermination() {
         // given
         diagnosticEngine = new CarDiagnosticEngine();
         Car car = CAR_CREATOR.createFromXml(INVALID_XML_MISSING_PARTS);
@@ -68,7 +67,7 @@ public class CarDiagnosticEngineTest extends CommonTestMembers {
     }
 
     @Test
-    public void whenDamagedPartsThenPrintedToConsoleWithEarlyTermination() {
+    void whenDamagedPartsThenPrintedToConsoleWithEarlyTermination() {
         // given
         diagnosticEngine = new CarDiagnosticEngine();
         Car car = CAR_CREATOR.createFromXml(INVALID_XML_DAMAGED_PARTS);
@@ -88,7 +87,7 @@ public class CarDiagnosticEngineTest extends CommonTestMembers {
     }
 
     @Test
-    public void whenAllAspectsOfXmlValidThenDiagnosticsCompleted() {
+    void whenAllAspectsOfXmlValidThenDiagnosticsCompleted() {
         // given
         diagnosticEngine = new CarDiagnosticEngine();
         Car car = CAR_CREATOR.createFromXml(VALID_XML);

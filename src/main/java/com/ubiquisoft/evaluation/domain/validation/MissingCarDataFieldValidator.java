@@ -6,10 +6,10 @@ import java.util.List;
 import com.google.common.base.Strings;
 import com.ubiquisoft.evaluation.domain.Car;
 
-public class MissingCarDataFieldValidator {
+public final class MissingCarDataFieldValidator {
 
     public static final String MISSING_DATA_FIELD_MSG = "Missing Data Field(s) Detected:";
-    private List<String> missingFields = new ArrayList<>();
+    private final List<String> missingFields = new ArrayList<>();
 
     public List<String> findMissingFields(Car car) {
         if (fieldIsMissing(car.getMake()))
@@ -26,8 +26,7 @@ public class MissingCarDataFieldValidator {
     }
 
     public void printMissingFields() {
-            missingFields.stream()
-                .forEach(field -> System.out.println(
+            missingFields.forEach(field -> System.out.println(
                         String.format(MISSING_DATA_FIELD_MSG + " %s", field)));
     }
 }

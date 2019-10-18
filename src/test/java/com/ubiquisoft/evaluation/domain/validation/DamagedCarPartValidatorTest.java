@@ -6,7 +6,6 @@ import static com.ubiquisoft.evaluation.domain.validation.DamagedCarPartValidato
 import static com.ubiquisoft.evaluation.utils.TestConstants.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-import java.io.PrintStream;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -17,12 +16,12 @@ import com.ubiquisoft.evaluation.domain.ConditionType;
 import com.ubiquisoft.evaluation.domain.PartType;
 import com.ubiquisoft.evaluation.utils.CommonTestMembers;
 
-public class DamagedCarPartValidatorTest extends CommonTestMembers {
+class DamagedCarPartValidatorTest extends CommonTestMembers {
 
-    private DamagedCarPartValidator damagedCarPartValidator = new DamagedCarPartValidator();
+    private final DamagedCarPartValidator damagedCarPartValidator = new DamagedCarPartValidator();
 
     @Test
-    public void whenNoDamagedPartsThenDamagedPartMapEmpty() {
+    void whenNoDamagedPartsThenDamagedPartMapEmpty() {
         // given
         Car car = CAR_CREATOR.createFromXml(VALID_XML);
         // when
@@ -32,7 +31,7 @@ public class DamagedCarPartValidatorTest extends CommonTestMembers {
     }
 
     @Test
-    public void whenDamagedPartsThenDamagedPartMapNotEmpty() {
+    void whenDamagedPartsThenDamagedPartMapNotEmpty() {
         // given
         Car car = CAR_CREATOR.createFromXml(INVALID_XML_DAMAGED_PARTS);
         // when
@@ -52,7 +51,7 @@ public class DamagedCarPartValidatorTest extends CommonTestMembers {
     }
 
     @Test
-    public void whenNoDamagedPartsThenNoPartsPrinted() {
+    void whenNoDamagedPartsThenNoPartsPrinted() {
         // given
         setUpSysOutStream();
         Car car = CAR_CREATOR.createFromXml(VALID_XML);
@@ -66,7 +65,7 @@ public class DamagedCarPartValidatorTest extends CommonTestMembers {
     }
 
     @Test
-    public void whenDamagedPartsThenPartsPrinted() {
+    void whenDamagedPartsThenPartsPrinted() {
         // given
         setUpSysOutStream();
         Car car = CAR_CREATOR.createFromXml(INVALID_XML_DAMAGED_PARTS);

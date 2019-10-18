@@ -1,6 +1,5 @@
 package com.ubiquisoft.evaluation.domain.validation;
 
-import static com.ubiquisoft.evaluation.domain.output.MissingCarPartPrinter.MISSING_PART_DETECTED_MSG;
 import static com.ubiquisoft.evaluation.utils.TestConstants.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
@@ -10,12 +9,12 @@ import com.ubiquisoft.evaluation.domain.Car;
 import com.ubiquisoft.evaluation.domain.output.MissingCarPartPrinter;
 import com.ubiquisoft.evaluation.utils.CommonTestMembers;
 
-public class MissingCarPartPrinterTest extends CommonTestMembers {
+class MissingCarPartPrinterTest extends CommonTestMembers {
 
     private MissingCarPartPrinter missingCarPartPrinter;
 
     @Test
-    public void whenNoPartsMissingThenPartsMissingReturnsFalse() {
+    void whenNoPartsMissingThenPartsMissingReturnsFalse() {
         // given
         Car car = CAR_CREATOR.createFromXml(VALID_XML);
         missingCarPartPrinter = new MissingCarPartPrinter(car);
@@ -24,7 +23,7 @@ public class MissingCarPartPrinterTest extends CommonTestMembers {
     }
 
     @Test
-    public void whenPartsMissingThenPartsMissingReturnsTrue() {
+    void whenPartsMissingThenPartsMissingReturnsTrue() {
         // given
         Car car = CAR_CREATOR.createFromXml(INVALID_XML_MISSING_PARTS);
         missingCarPartPrinter = new MissingCarPartPrinter(car);
@@ -33,7 +32,7 @@ public class MissingCarPartPrinterTest extends CommonTestMembers {
     }
 
     @Test
-    public void whenNoPartsMissingThenNothingPrinted() {
+    void whenNoPartsMissingThenNothingPrinted() {
         // given
         setUpSysOutStream();
         Car car = CAR_CREATOR.createFromXml(VALID_XML);
@@ -47,7 +46,7 @@ public class MissingCarPartPrinterTest extends CommonTestMembers {
     }
 
     @Test
-    public void whenPartsMissingThenMissingPartsAndCountPrinted() {
+    void whenPartsMissingThenMissingPartsAndCountPrinted() {
         // given
         setUpSysOutStream();
         Car car = CAR_CREATOR.createFromXml(INVALID_XML_MISSING_PARTS);

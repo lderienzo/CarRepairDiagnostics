@@ -11,9 +11,9 @@ import com.ubiquisoft.evaluation.domain.ConditionType;
 import com.ubiquisoft.evaluation.domain.Part;
 import com.ubiquisoft.evaluation.domain.PartType;
 
-public class DamagedCarPartValidator {
+public final class DamagedCarPartValidator {
 
-    private Map<PartType, ConditionType> damagedPartsMap = new EnumMap<>(PartType.class);
+    private final Map<PartType, ConditionType> damagedPartsMap = new EnumMap<>(PartType.class);
     public static final String DAMAGED_PART_DETECTED_MSG = "Damaged Part Detected:";
 
     public Map<PartType, ConditionType> getDamagedPartsMap(Car car) {

@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Part {
+public final class Part {
 
 	private String inventoryId;
 
@@ -18,7 +18,7 @@ public class Part {
 		return !isInWorkingCondition();
 	}
 
-	public boolean isInWorkingCondition() {
+	private boolean isInWorkingCondition() {
 		switch (this.condition) {
 			case NEW:
 			case GOOD:

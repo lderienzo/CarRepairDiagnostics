@@ -1,5 +1,8 @@
 package com.ubiquisoft.evaluation.domain.xml.unmarshaller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import javax.xml.bind.JAXBContext;
@@ -11,7 +14,8 @@ import com.ubiquisoft.evaluation.domain.Part;
 import com.ubiquisoft.evaluation.exception.CarCreatorException;
 
 
-public class CarCreator {
+public final class CarCreator {
+
     private static final String ERROR_MSG = "Error constructing car from xml.";
 
     public Car createFromXml(String xmlFile) {
@@ -21,7 +25,20 @@ public class CarCreator {
     }
 
     private InputStream readXmlFileDataIntoInputStream(String xmlFile) {
-        return ClassLoader.getSystemResourceAsStream(xmlFile);
+        InputStream inStream = ClassLoader.getSystemResourceAsStream(xmlFile);
+        if (inStream == null)
+            inStream = seeIfFilePathSpecified(xmlFile);
+        return inStream;
+    }
+
+    private InputStream seeIfFilePathSpecified(String file) {
+        InputStream inStream;
+        try {
+            inStream = new FileInputStream(new File(file));
+        } catch (FileNotFoundException e) {
+            throw new CarCreatorException(e);
+        }
+        return inStream;
     }
 
     private void verifyInputStreamIsValid(InputStream xml) {

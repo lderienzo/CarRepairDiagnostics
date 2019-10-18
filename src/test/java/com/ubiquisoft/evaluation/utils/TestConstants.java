@@ -2,9 +2,6 @@ package com.ubiquisoft.evaluation.utils;
 
 import static com.ubiquisoft.evaluation.domain.output.MissingCarPartPrinter.MISSING_PART_DETECTED_MSG;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import com.ubiquisoft.evaluation.domain.xml.unmarshaller.CarCreator;
 
 public final class TestConstants {

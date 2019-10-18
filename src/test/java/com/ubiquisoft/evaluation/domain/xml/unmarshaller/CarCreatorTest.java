@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 import com.ubiquisoft.evaluation.domain.Car;
 import com.ubiquisoft.evaluation.exception.CarCreatorException;
 
-public class CarCreatorTest {
+class CarCreatorTest {
 
     @Test
-    public void whenValidXmlFileThenCarProperlyCreated() {
+    void whenValidXmlFileThenCarProperlyCreated() {
         // given/when
         Car car = CAR_CREATOR.createFromXml(VALID_XML);
         // then
@@ -25,7 +25,7 @@ public class CarCreatorTest {
     }
 
     @Test
-    public void whenInvalidXmlFileThenCarCreatorExceptionThrown() {
+    void whenInvalidXmlFileThenCarCreatorExceptionThrown() {
         // given
         String invalidXmlFile = "bogus.xml";
         Assertions.assertThrows(CarCreatorException.class, () -> {  // then
