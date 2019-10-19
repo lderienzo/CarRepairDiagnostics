@@ -1,6 +1,7 @@
-package com.ubiquisoft.evaluation.utils;
+package com.ubiquisoft.evaluation.domain;
 
-import static com.ubiquisoft.evaluation.domain.output.MissingCarPartPrinter.MISSING_PART_DETECTED_MSG;
+
+import static com.ubiquisoft.evaluation.domain.Car.MISSING_PART_DETECTED_MSG;
 
 import com.ubiquisoft.evaluation.domain.xml.unmarshaller.CarCreator;
 

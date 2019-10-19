@@ -1,10 +1,9 @@
 package com.ubiquisoft.evaluation;
 
 import static com.ubiquisoft.evaluation.CarDiagnosticEngine.*;
-import static com.ubiquisoft.evaluation.domain.validation.DamagedCarPartValidator.DAMAGED_PART_DETECTED_MSG;
-import static com.ubiquisoft.evaluation.domain.validation.MissingCarDataFieldValidator.MISSING_DATA_FIELD_MSG;
+import static com.ubiquisoft.evaluation.domain.Car.*;
 import static com.ubiquisoft.evaluation.enums.ExitCode.*;
-import static com.ubiquisoft.evaluation.utils.TestConstants.*;
+import static com.ubiquisoft.evaluation.domain.TestConstants.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 import java.io.ByteArrayOutputStream;
