@@ -25,14 +25,22 @@ class CarDiagnosticEngineTest extends CommonTestMembers {
 
     @BeforeEach
     void setUpStreams() {
-        setUpSysOutStream();
+        redirectSystemOutputToOutContent();
+        redirectSystemErrorToErrContent();
+    }
+
+    private void redirectSystemErrorToErrContent() {
         sysErr = System.err;
         System.setErr(new PrintStream(errContent));
     }
 
     @AfterEach
     void revertStreams() {
-        revertSysOutStream();
+        resetSystemOutput();
+        resetSystemError();
+    }
+
+    private void resetSystemError() {
         System.setErr(sysErr);
     }
 

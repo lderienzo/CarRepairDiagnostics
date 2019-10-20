@@ -8,12 +8,12 @@ public class CommonTestMembers {
     protected final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private PrintStream sysOut;
 
-    protected void setUpSysOutStream() {
+    protected void redirectSystemOutputToOutContent() {
         sysOut = System.out;
         System.setOut(new PrintStream(outContent));
     }
 
-    protected void revertSysOutStream() {
+    protected void resetSystemOutput() {
         System.setOut(sysOut);
     }
 }

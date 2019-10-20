@@ -31,7 +31,7 @@ class PartValidatorTest extends CommonTestMembers {
     @Test
     void whenNoPartsMissingThenNothingPrinted() {
         // given
-        setUpSysOutStream();
+        redirectSystemOutputToOutContent();
         Car car = CAR_CREATOR.createFromXml(VALID_XML);
         partValidator.thereAreMissingParts(car);
         // when
@@ -39,13 +39,13 @@ class PartValidatorTest extends CommonTestMembers {
         // then
         assertThat(outContent.toString()).isEqualTo("");
 
-        revertSysOutStream();
+        resetSystemOutput();
     }
 
     @Test
     void whenPartsMissingThenMissingPartsAndCountsPrinted() {
         // given
-        setUpSysOutStream();
+        redirectSystemOutputToOutContent();
         Car car = CAR_CREATOR.createFromXml(INVALID_XML_MISSING_PARTS);
         partValidator.thereAreMissingParts(car);
         // when
@@ -53,7 +53,7 @@ class PartValidatorTest extends CommonTestMembers {
         // then
         assertThat(outContent.toString()).isEqualTo(MISSING_PARTS);
 
-        revertSysOutStream();
+        resetSystemOutput();
     }
 
     @Test
@@ -75,7 +75,7 @@ class PartValidatorTest extends CommonTestMembers {
     @Test
     void whenNoDamagedPartsThenNoPartsPrinted() {
         // given
-        setUpSysOutStream();
+        redirectSystemOutputToOutContent();
         Car car = CAR_CREATOR.createFromXml(VALID_XML);
         partValidator.thereAreDamagedParts(car);
         // when
@@ -83,13 +83,13 @@ class PartValidatorTest extends CommonTestMembers {
         // then
         assertThat(outContent.toString()).isEmpty();
 
-        revertSysOutStream();
+        resetSystemOutput();
     }
 
     @Test
     void whenDamagedPartsThenPartsPrinted() {
         // given
-        setUpSysOutStream();
+        redirectSystemOutputToOutContent();
         Car car = CAR_CREATOR.createFromXml(INVALID_XML_DAMAGED_PARTS);
         partValidator.thereAreDamagedParts(car);
         // when
@@ -100,6 +100,6 @@ class PartValidatorTest extends CommonTestMembers {
                 DAMAGED_PART_DETECTED_MSG + " TIRE - Condition: FLAT\n" +
                 DAMAGED_PART_DETECTED_MSG + " OIL_FILTER - Condition: CLOGGED\n");
 
-        revertSysOutStream();
+        resetSystemOutput();
     }
 }

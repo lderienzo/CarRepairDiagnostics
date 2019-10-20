@@ -53,7 +53,7 @@ class CarTest extends CommonTestMembers {
     @Test
     void whenNoMissingFieldsThenNonePrinted() {
         // given
-        setUpSysOutStream();
+        redirectSystemOutputToOutContent();
         Car car = CAR_CREATOR.createFromXml(VALID_XML);
         car.hasMissingDataFields();
         // when
@@ -61,13 +61,13 @@ class CarTest extends CommonTestMembers {
         // then
         assertThat(outContent.toString()).isEmpty();
 
-        revertSysOutStream();
+        resetSystemOutput();
     }
 
     @Test
     void whenMissingFieldsThenFieldsToPrint() {
         // given
-        setUpSysOutStream();
+        redirectSystemOutputToOutContent();
         Car car = CAR_CREATOR.createFromXml(INVALID_XML_MISSING_DATA_FIELDS);
         car.hasMissingDataFields();
         // when
@@ -75,6 +75,6 @@ class CarTest extends CommonTestMembers {
         // then
         assertThat(outContent.toString()).isEqualTo(MISSING_DATA_FIELD_MSG + " make\n");
 
-        revertSysOutStream();
+        resetSystemOutput();
     }
 }
