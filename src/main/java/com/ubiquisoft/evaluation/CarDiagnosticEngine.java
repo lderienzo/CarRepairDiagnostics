@@ -69,17 +69,25 @@ final class CarDiagnosticEngine {
 	}
 
 	public static void main(String[] args) {
-		if (args == null || args.length == 0)
+		if (argsIsEmpty(args))
 			haltProgramEarly("No XML File specified. ");
-		String xmlFile = args[0];
+		String xmlFile = getXmlFilePathArgument(args);
 		Car car = new CarCreator().createFromXml(xmlFile);
 		if (runDiagnosticCheckOnCar(car) == ERROR)
 			haltProgramEarly();
 	}
 
+	private static boolean argsIsEmpty(String[] a) {
+		return a == null || a.length == 0;
+	}
+
 	private static void haltProgramEarly(String msgPrefix) {
 		System.err.println(msgPrefix + ENDING_DIAGNOSTICS_EARLY_MSG);
 		System.exit(1);
+	}
+
+	private static String getXmlFilePathArgument(String[] a) {
+		return a[0];
 	}
 
 	private static ExitCode runDiagnosticCheckOnCar(Car car) {
