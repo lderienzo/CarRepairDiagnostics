@@ -81,6 +81,16 @@ final class CarDiagnosticDataPrinterImplTest extends CommonTestMembers {
     }
 
     @Test
+    void whenAllPartsMissingThenPrintMissingPartsPrintsThem() {
+        // given
+        setUpDiagnosticDataPrinter(INVALID_XML_MISSING_ALL_PARTS);
+        // when
+        diagnosticDataPrinter.printMissingParts();
+        // then
+        assertThat(outContent.toString()).isEqualTo(EXPECTED_MISSING_ALL_PARTS);
+    }
+
+    @Test
     void whenXmlHasDamagedPartsThenDamagedPartsPrintsThem() {
         // given
         setUpDiagnosticDataPrinter(INVALID_XML_DAMAGED_PARTS);

@@ -44,6 +44,8 @@ public final class Car {
 	}
 
 	public List<Part> getParts() {
+		if (parts == null)
+			return Collections.EMPTY_LIST;
 		return Collections.unmodifiableList(parts);
 	}
 
