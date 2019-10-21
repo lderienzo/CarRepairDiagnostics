@@ -3,10 +3,6 @@ package com.ubiquisoft.evaluation;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import com.ubiquisoft.evaluation.CarDiagnosticDataExtractorImpl;
-import com.ubiquisoft.evaluation.CarDiagnosticDataExtractor;
-import com.ubiquisoft.evaluation.DiagnosticData;
-
 class CommonTestMembers {
 
     static final CarDiagnosticDataExtractor CAR_DIAGNOSTIC_DATA_EXTRACTOR  = new CarDiagnosticDataExtractorImpl();

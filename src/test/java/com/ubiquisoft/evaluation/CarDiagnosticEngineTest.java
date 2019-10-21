@@ -85,11 +85,7 @@ class CarDiagnosticEngineTest extends CommonTestMembers {
         assertThat(outContent.toString()).isEqualTo(BEGIN_DIAGNOSTICS_MSG + "\n" +
                 BEGIN_CHECK_DATA_FIELDS_MSG + "\n" + END_CHECK_DATA_FIELDS_MSG + "\n" +
                 BEGIN_CHECK_MISSING_PARTS_MSG + "\n" + END_CHECK_MISSING_PARTS_MSG + "\n" +
-                BEGIN_CHECK_DAMAGED_PARTS_MSG + "\n" +
-                DAMAGED_PART_DETECTED_MSG + " ENGINE - Condition: USED\n" +
-                DAMAGED_PART_DETECTED_MSG + " ELECTRICAL - Condition: NO_POWER\n" +
-                DAMAGED_PART_DETECTED_MSG + " TIRE - Condition: FLAT\n" +
-                DAMAGED_PART_DETECTED_MSG + " OIL_FILTER - Condition: CLOGGED\n");
+                BEGIN_CHECK_DAMAGED_PARTS_MSG + "\n" + EXPECTED_DAMAGED_PARTS);
     }
 
     @Test
