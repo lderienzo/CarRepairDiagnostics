@@ -31,7 +31,6 @@ final class CarDiagnosticDataExtractorImplTest extends CommonTestMembers {
 
     private void setUpDiagnosticDataExtractor(String xmlToUse) {
         Car car = CAR_CREATOR.createFromXml(xmlToUse);
-        // when
         diagnosticData = CAR_DIAGNOSTIC_DATA_EXTRACTOR.extractDiagnosticData(car);
     }
 

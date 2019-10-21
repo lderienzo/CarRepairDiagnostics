@@ -25,7 +25,6 @@ final class CarDiagnosticDataValidatorImplTest extends CommonTestMembers {
     private void setUpDiagnosticDataValidator(String xmlToUse) {
         Car car = CAR_CREATOR.createFromXml(xmlToUse);
         diagnosticData = CAR_DIAGNOSTIC_DATA_EXTRACTOR.extractDiagnosticData(car);
-        // when
         diagnosticDataValidator = new CarDiagnosticDataValidatorImpl(diagnosticData);
     }
 
