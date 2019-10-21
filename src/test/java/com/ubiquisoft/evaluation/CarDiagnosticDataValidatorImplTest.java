@@ -14,24 +14,25 @@ final class CarDiagnosticDataValidatorImplTest extends CommonTestMembers {
 
     @Test
     void whenXmlContainsAllValidDataThenValidatorReportsThis() {
-        // given
-        Car car = CAR_CREATOR.createFromXml(VALID_XML);
-        diagnosticData = CAR_DIAGNOSTIC_DATA_EXTRACTOR.extractDiagnosticData(car);
-        // when
-        diagnosticDataValidator = new CarDiagnosticDataValidatorImpl(diagnosticData);
+        // given/when
+        setUpDiagnosticDataValidator(VALID_XML);
         // then
         assertThat(diagnosticDataValidator.hasMissingDataFields()).isFalse();
         assertThat(diagnosticDataValidator.hasMissingParts()).isFalse();
         assertThat(diagnosticDataValidator.hasDamagedParts()).isFalse();
     }
 
-    @Test
-    void whenXmlHasMissingDataFieldsThenHasMissingDataFieldsIsTrue() {
-        // given
-        Car car = CAR_CREATOR.createFromXml(INVALID_XML_MISSING_DATA_FIELDS);
+    private void setUpDiagnosticDataValidator(String xmlToUse) {
+        Car car = CAR_CREATOR.createFromXml(xmlToUse);
         diagnosticData = CAR_DIAGNOSTIC_DATA_EXTRACTOR.extractDiagnosticData(car);
         // when
         diagnosticDataValidator = new CarDiagnosticDataValidatorImpl(diagnosticData);
+    }
+
+    @Test
+    void whenXmlHasMissingDataFieldsThenHasMissingDataFieldsIsTrue() {
+        // given/when
+        setUpDiagnosticDataValidator(INVALID_XML_MISSING_DATA_FIELDS);
         // then
         assertThat(diagnosticDataValidator.hasMissingDataFields()).isTrue();
         assertThat(diagnosticDataValidator.hasMissingParts()).isFalse();
@@ -40,11 +41,8 @@ final class CarDiagnosticDataValidatorImplTest extends CommonTestMembers {
 
     @Test
     void whenXmlHasMissingPartsThenHasMissingPartsIsTrue() {
-        // given
-        Car car = CAR_CREATOR.createFromXml(INVALID_XML_MISSING_PARTS);
-        diagnosticData = CAR_DIAGNOSTIC_DATA_EXTRACTOR.extractDiagnosticData(car);
-        // when
-        diagnosticDataValidator = new CarDiagnosticDataValidatorImpl(diagnosticData);
+        // given/when
+        setUpDiagnosticDataValidator(INVALID_XML_MISSING_PARTS);
         // then
         assertThat(diagnosticDataValidator.hasMissingDataFields()).isFalse();
         assertThat(diagnosticDataValidator.hasMissingParts()).isTrue();
@@ -53,11 +51,8 @@ final class CarDiagnosticDataValidatorImplTest extends CommonTestMembers {
 
     @Test
     void whenXmlHasDamagedPartsThenHasDamagedPartsIsTrue() {
-        // given
-        Car car = CAR_CREATOR.createFromXml(INVALID_XML_DAMAGED_PARTS);
-        diagnosticData = CAR_DIAGNOSTIC_DATA_EXTRACTOR.extractDiagnosticData(car);
-        // when
-        diagnosticDataValidator = new CarDiagnosticDataValidatorImpl(diagnosticData);
+        // given/when
+        setUpDiagnosticDataValidator(INVALID_XML_DAMAGED_PARTS);
         // then
         assertThat(diagnosticDataValidator.hasMissingDataFields()).isFalse();
         assertThat(diagnosticDataValidator.hasMissingParts()).isFalse();

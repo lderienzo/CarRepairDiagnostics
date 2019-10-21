@@ -21,14 +21,18 @@ final class CarDiagnosticDataExtractorImplTest extends CommonTestMembers {
 
     @Test
     void whenXmlContainsAllValidDataThenAllExtractedDiagnosticDataEmpty() {
-        // given
-        Car car = CAR_CREATOR.createFromXml(VALID_XML);
-        // when
-        diagnosticData = CAR_DIAGNOSTIC_DATA_EXTRACTOR.extractDiagnosticData(car);
+        // given/when
+        setUpDiagnosticDataExtractor(VALID_XML);
         // then
         assertThat(diagnosticData.getMissingFields()).isEmpty();
         assertThatMissingPartsMapHasZeroForAllMissingPartCounts();
         assertThat(diagnosticData.getDamagedParts()).isEmpty();
+    }
+
+    private void setUpDiagnosticDataExtractor(String xmlToUse) {
+        Car car = CAR_CREATOR.createFromXml(xmlToUse);
+        // when
+        diagnosticData = CAR_DIAGNOSTIC_DATA_EXTRACTOR.extractDiagnosticData(car);
     }
 
     private void assertThatMissingPartsMapHasZeroForAllMissingPartCounts() {
@@ -37,10 +41,8 @@ final class CarDiagnosticDataExtractorImplTest extends CommonTestMembers {
 
     @Test
     void whenXmlHasMissingDataFieldsThenExtractedDiagnosticDataWillContainThem() {
-        // given
-        Car car = CAR_CREATOR.createFromXml(INVALID_XML_MISSING_DATA_FIELDS);
-        // when
-        diagnosticData = CAR_DIAGNOSTIC_DATA_EXTRACTOR.extractDiagnosticData(car);
+        // given/when
+        setUpDiagnosticDataExtractor(INVALID_XML_MISSING_DATA_FIELDS);
         // then
         assertThat(diagnosticData.getMissingFields().size()).isEqualTo(1);
         assertThat(diagnosticData.getMissingFields().get(0)).isEqualTo("make");
@@ -50,10 +52,8 @@ final class CarDiagnosticDataExtractorImplTest extends CommonTestMembers {
 
     @Test
     void whenXmlMissingPartsThenExtractedDiagnosticDataWillContainThem() {
-        // given
-        Car car = CAR_CREATOR.createFromXml(INVALID_XML_MISSING_PARTS);
-        // when
-        diagnosticData = CAR_DIAGNOSTIC_DATA_EXTRACTOR.extractDiagnosticData(car);
+        // given/when
+        setUpDiagnosticDataExtractor(INVALID_XML_MISSING_PARTS);
         // then
         assertThat(diagnosticData.getMissingFields()).isEmpty();
         assertThat(diagnosticData.getMissingParts().entrySet())
@@ -73,10 +73,8 @@ final class CarDiagnosticDataExtractorImplTest extends CommonTestMembers {
 
     @Test
     void whenXmlContainsDamagedPartsThenExtractedDiagnosticDataWillContainThem() {
-        // given
-        Car car = CAR_CREATOR.createFromXml(INVALID_XML_DAMAGED_PARTS);
-        // when
-        diagnosticData = CAR_DIAGNOSTIC_DATA_EXTRACTOR.extractDiagnosticData(car);
+        // given/when
+        setUpDiagnosticDataExtractor(INVALID_XML_DAMAGED_PARTS);
         // then
         assertThat(diagnosticData.getMissingFields()).isEmpty();
         assertThatMissingPartsMapHasZeroForAllMissingPartCounts();
