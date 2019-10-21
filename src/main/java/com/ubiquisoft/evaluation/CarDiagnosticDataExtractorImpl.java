@@ -15,6 +15,8 @@ import com.ubiquisoft.evaluation.domain.PartType;
 
 final class CarDiagnosticDataExtractorImpl implements CarDiagnosticDataExtractor {
 
+    private List<Part> parts;
+
     @Override
     public DiagnosticData extractDiagnosticData(Car car) {
         List<String> missingFields = findMissingFields(car);
@@ -39,28 +41,29 @@ final class CarDiagnosticDataExtractorImpl implements CarDiagnosticDataExtractor
     }
 
     private Map<PartType, Integer> findMissingParts(Car car) {
-        return createMapOfMissingPartsFromPartsList(car.getParts());
+        this.parts = car.getParts();
+        return createMapOfMissingPartsUsingPartsList();
     }
 
-    private Map<PartType, Integer> createMapOfMissingPartsFromPartsList(List<Part> parts) {
+    private Map<PartType, Integer> createMapOfMissingPartsUsingPartsList() {
         Map<PartType, Integer> m = new EnumMap<>(PartType.class);
-        m.put(ENGINE, determineNumberMissingOfSpecificPartType(1, ENGINE, parts));
-        m.put(ELECTRICAL, determineNumberMissingOfSpecificPartType(1, ELECTRICAL, parts));
-        m.put(FUEL_FILTER, determineNumberMissingOfSpecificPartType(1, FUEL_FILTER, parts));
-        m.put(OIL_FILTER, determineNumberMissingOfSpecificPartType(1, OIL_FILTER, parts));
-        m.put(TIRE, determineNumberMissingOfSpecificPartType(4, TIRE, parts));
+        m.put(ENGINE, determineNumberMissingOfSpecificPartType(1, ENGINE));
+        m.put(ELECTRICAL, determineNumberMissingOfSpecificPartType(1, ELECTRICAL));
+        m.put(FUEL_FILTER, determineNumberMissingOfSpecificPartType(1, FUEL_FILTER));
+        m.put(OIL_FILTER, determineNumberMissingOfSpecificPartType(1, OIL_FILTER));
+        m.put(TIRE, determineNumberMissingOfSpecificPartType(4, TIRE));
         return m;
     }
 
-    private int determineNumberMissingOfSpecificPartType(int shouldHave, PartType partType, List<Part> parts) {
-        return subtractNumberShouldHaveFromActual(shouldHave, partType, parts);
+    private int determineNumberMissingOfSpecificPartType(int shouldHave, PartType partType) {
+        return subtractNumberShouldHaveFromActual(shouldHave, partType);
     }
 
-    private int subtractNumberShouldHaveFromActual(int shouldHave, PartType partType, List<Part> parts ) {
-        return Math.toIntExact(shouldHave - actualNumberPresentInList(partType, parts));
+    private int subtractNumberShouldHaveFromActual(int shouldHave, PartType partType) {
+        return Math.toIntExact(shouldHave - actualNumberPresentInList(partType));
     }
 
-    private long actualNumberPresentInList(PartType partType, List<Part> parts ) {
+    private long actualNumberPresentInList(PartType partType) {
         return parts.stream().filter(p -> p.getType() == partType).count();
     }
 
