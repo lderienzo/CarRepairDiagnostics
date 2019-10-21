@@ -47,14 +47,18 @@ final class CarDiagnosticDataPrinterImpl implements CarDiagnosticDataPrinter {
         System.out.println(String.format(MISSING_PART_DETECTED_MSG + " %s - Count: %s", partType, count));
     }
 
-    private PartType partType(Map.Entry<PartType, Integer> e) {
+    private PartType partType(Map.Entry<PartType, ?> e) {
         return e.getKey();
     }
 
     @Override
     public void printDamagedParts() {
         for (Map.Entry<PartType, ConditionType> e : diagnosticData.getDamagedParts().entrySet())
-            printDamagedPart(e.getKey(), e.getValue());
+            printDamagedPart(partType(e), conditionType(e));
+    }
+
+    private ConditionType conditionType(Map.Entry<PartType, ConditionType> e) {
+        return e.getValue();
     }
 
     private void printDamagedPart(PartType partType, ConditionType condition) {
