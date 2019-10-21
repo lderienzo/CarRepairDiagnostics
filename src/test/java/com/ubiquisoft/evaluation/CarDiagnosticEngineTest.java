@@ -1,9 +1,9 @@
 package com.ubiquisoft.evaluation;
 
+import static com.ubiquisoft.evaluation.CarDiagnosticDataPrinterImpl.*;
 import static com.ubiquisoft.evaluation.CarDiagnosticEngine.*;
-import static com.ubiquisoft.evaluation.domain.Car.*;
 import static com.ubiquisoft.evaluation.enums.ExitCode.*;
-import static com.ubiquisoft.evaluation.domain.TestConstants.*;
+import static com.ubiquisoft.evaluation.TestConstants.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 import java.io.ByteArrayOutputStream;
@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 
 import com.ubiquisoft.evaluation.domain.Car;
 import com.ubiquisoft.evaluation.enums.ExitCode;
-import com.ubiquisoft.evaluation.utils.CommonTestMembers;
 
 class CarDiagnosticEngineTest extends CommonTestMembers {
 
@@ -55,7 +54,7 @@ class CarDiagnosticEngineTest extends CommonTestMembers {
         assertThat(exitCode).isEqualTo(ERROR);
         assertThat(errContent.toString()).isEqualTo(MISSING_DATA_FIELDS_ERROR_MSG + "\n");
         assertThat(outContent.toString()).isEqualTo(BEGIN_DIAGNOSTICS_MSG + "\n" +
-            BEGIN_CHECK_DATA_FIELDS_MSG + "\n" + MISSING_DATA_FIELD_MSG + " make\n");
+            BEGIN_CHECK_DATA_FIELDS_MSG + "\n" + MISSING_DATA_FIELD_DETECTED_MSG + " make\n");
     }
 
     @Test
@@ -70,7 +69,7 @@ class CarDiagnosticEngineTest extends CommonTestMembers {
         assertThat(errContent.toString()).isEqualTo(MISSING_PARTS_ERROR_MSG + "\n");
         assertThat(outContent.toString()).isEqualTo(BEGIN_DIAGNOSTICS_MSG + "\n" +
                         BEGIN_CHECK_DATA_FIELDS_MSG + "\n" + END_CHECK_DATA_FIELDS_MSG + "\n" +
-                BEGIN_CHECK_MISSING_PARTS_MSG + "\n" + MISSING_PARTS);
+                BEGIN_CHECK_MISSING_PARTS_MSG + "\n" + EXPECTED_MISSING_PARTS);
     }
 
     @Test
@@ -108,5 +107,4 @@ class CarDiagnosticEngineTest extends CommonTestMembers {
                 BEGIN_CHECK_DAMAGED_PARTS_MSG + "\n" + END_CHECK_DAMAGED_PARTS_MSG + "\n" +
                 END_DIAGNOSTICS_SUCCESSFUL_MSG + "\n");
     }
-
 }

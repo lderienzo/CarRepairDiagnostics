@@ -1,6 +1,6 @@
 package com.ubiquisoft.evaluation.domain.xml.unmarshaller;
 
-import static com.ubiquisoft.evaluation.domain.TestConstants.*;
+import static com.ubiquisoft.evaluation.TestConstants.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 import org.junit.jupiter.api.Assertions;

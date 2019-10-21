@@ -6,7 +6,7 @@
 	<parts>
 		<inventoryId>electrical</inventoryId>
 		<type>ELECTRICAL</type>
-		<condition>NO_POWER</condition>
+		<condition>NEW</condition>
 	</parts>
 	<parts>
 		<inventoryId>tire</inventoryId>
@@ -16,11 +16,11 @@
 	<parts>
 		<inventoryId>tire</inventoryId>
 		<type>TIRE</type>
-		<condition>FLAT</condition>
+		<condition>NEW</condition>
 	</parts>
 	<parts>
 		<inventoryId>oil_filter</inventoryId>
 		<type>OIL_FILTER</type>
-		<condition>CLOGGED</condition>
+		<condition>NEW</condition>
 	</parts>
 </car>
