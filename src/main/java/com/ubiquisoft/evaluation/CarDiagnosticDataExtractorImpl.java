@@ -3,6 +3,7 @@ package com.ubiquisoft.evaluation;
 import static com.ubiquisoft.evaluation.domain.PartType.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -47,11 +48,9 @@ final class CarDiagnosticDataExtractorImpl implements CarDiagnosticDataExtractor
 
     private Map<PartType, Integer> createMapOfMissingPartsUsingPartsList() {
         Map<PartType, Integer> m = new EnumMap<>(PartType.class);
-        m.put(ENGINE, determineNumberMissingOfSpecificPartType(1, ENGINE));
-        m.put(ELECTRICAL, determineNumberMissingOfSpecificPartType(1, ELECTRICAL));
-        m.put(FUEL_FILTER, determineNumberMissingOfSpecificPartType(1, FUEL_FILTER));
-        m.put(OIL_FILTER, determineNumberMissingOfSpecificPartType(1, OIL_FILTER));
-        m.put(TIRE, determineNumberMissingOfSpecificPartType(4, TIRE));
+        Arrays.stream(PartType.values()).forEach(partType -> {
+            int shouldHave = (partType == TIRE ? 4 : 1);
+            m.put(partType, determineNumberMissingOfSpecificPartType(shouldHave, partType));});
         return m;
     }
 
