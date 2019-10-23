@@ -32,8 +32,7 @@ final class CarDiagnosticDataPrinterImpl implements CarDiagnosticDataPrinter {
     }
 
     private void printOnlyIfMissingCountGreaterThanZero(Map.Entry<PartType, Integer> e) {
-        if (missingCount(e) > 0)
-            printMissingPart(partType(e), missingCount(e));
+        if (missingCount(e) > 0) printMissingPart(partType(e), missingCount(e));
     }
 
     private int missingCount(Map.Entry<PartType, Integer> e) {

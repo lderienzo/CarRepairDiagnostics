@@ -5,12 +5,9 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-import com.ubiquisoft.evaluation.domain.Car;
-
 final class CarDiagnosticDataValidatorImplTest extends CommonTestMembers {
 
     private static CarDiagnosticDataValidator diagnosticDataValidator;
-
 
     @Test
     void whenXmlContainsAllValidDataThenValidatorReportsThis() {
@@ -23,8 +20,7 @@ final class CarDiagnosticDataValidatorImplTest extends CommonTestMembers {
     }
 
     private void setUpDiagnosticDataValidator(String xmlToUse) {
-        Car car = CAR_CREATOR.createFromXml(xmlToUse);
-        diagnosticData = CAR_DIAGNOSTIC_DATA_EXTRACTOR.extractDiagnosticData(car);
+        extractDiagnosticData(xmlToUse);
         diagnosticDataValidator = new CarDiagnosticDataValidatorImpl(diagnosticData);
     }
 

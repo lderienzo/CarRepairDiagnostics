@@ -8,7 +8,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.ubiquisoft.evaluation.domain.Car;
 
 final class CarDiagnosticDataPrinterImplTest extends CommonTestMembers {
 
@@ -35,8 +34,7 @@ final class CarDiagnosticDataPrinterImplTest extends CommonTestMembers {
     }
 
     private void setUpDiagnosticDataPrinter(String xmlToUse) {
-        Car car = CAR_CREATOR.createFromXml(xmlToUse);
-        diagnosticData = CAR_DIAGNOSTIC_DATA_EXTRACTOR.extractDiagnosticData(car);
+        extractDiagnosticData(xmlToUse);
         diagnosticDataPrinter = new CarDiagnosticDataPrinterImpl(diagnosticData);
     }
 
