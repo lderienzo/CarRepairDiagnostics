@@ -68,8 +68,7 @@ final class CarDiagnosticDataExtractorImpl implements CarDiagnosticDataExtractor
 
     private Map<PartType, ConditionType> findDamagedParts(Car car) {
         Map<PartType, ConditionType> map = new EnumMap<>(PartType.class);
-        for (Part part : car.getParts())
-            addPartToMapIfNotWorking(part, map);
+        car.getParts().stream().forEach(part -> addPartToMapIfNotWorking(part, map));
         return map;
     }
 

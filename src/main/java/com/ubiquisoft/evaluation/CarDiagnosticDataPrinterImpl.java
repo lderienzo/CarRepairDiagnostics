@@ -20,15 +20,13 @@ final class CarDiagnosticDataPrinterImpl implements CarDiagnosticDataPrinter {
 
     @Override
     public void printMissingDataFields() {
-        diagnosticData.getMissingFields().forEach(
-                field -> System.out.println(
+        diagnosticData.getMissingFields().forEach(field -> System.out.println(
                         String.format(MISSING_DATA_FIELD_DETECTED_MSG + " %s", field)));
     }
 
     @Override
     public void printMissingParts() {
-        for (Map.Entry<PartType, Integer> e : diagnosticData.getMissingParts().entrySet())
-            printOnlyIfMissingCountGreaterThanZero(e);
+        diagnosticData.getMissingParts().entrySet().stream().forEach(e -> printOnlyIfMissingCountGreaterThanZero(e));
     }
 
     private void printOnlyIfMissingCountGreaterThanZero(Map.Entry<PartType, Integer> e) {
@@ -52,8 +50,8 @@ final class CarDiagnosticDataPrinterImpl implements CarDiagnosticDataPrinter {
 
     @Override
     public void printDamagedParts() {
-        for (Map.Entry<PartType, ConditionType> e : diagnosticData.getDamagedParts().entrySet())
-            printDamagedPart(partType(e), conditionType(e));
+        diagnosticData.getDamagedParts().entrySet().stream()
+                .forEach(e -> printDamagedPart(partType(e), conditionType(e)));
     }
 
     private ConditionType conditionType(Map.Entry<PartType, ConditionType> e) {
