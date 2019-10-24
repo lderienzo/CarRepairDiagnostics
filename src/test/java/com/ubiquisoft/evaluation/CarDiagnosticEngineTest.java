@@ -1,22 +1,19 @@
 package com.ubiquisoft.evaluation;
 
-import static com.ubiquisoft.evaluation.CarDiagnosticDataPrinterImpl.*;
 import static com.ubiquisoft.evaluation.CarDiagnosticEngine.*;
-import static com.ubiquisoft.evaluation.enums.ExitCode.*;
 import static com.ubiquisoft.evaluation.TestConstants.*;
+import static com.ubiquisoft.evaluation.diagnosticdata.missingfield.MissingFieldDataPrinter.MISSING_DATA_FIELD_DETECTED_MSG;
+import static com.ubiquisoft.evaluation.enums.ExitCode.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.io.*;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import com.ubiquisoft.evaluation.domain.Car;
 import com.ubiquisoft.evaluation.enums.ExitCode;
 
-class CarDiagnosticEngineTest extends CommonTestMembers {
+class CarDiagnosticEngineTest extends CommonDataPrinterTestMembers {
 
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     private static CarDiagnosticEngine diagnosticEngine;

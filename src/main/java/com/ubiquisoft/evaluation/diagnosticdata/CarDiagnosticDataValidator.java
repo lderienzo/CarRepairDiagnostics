@@ -1,6 +1,6 @@
-package com.ubiquisoft.evaluation;
+package com.ubiquisoft.evaluation.diagnosticdata;
 
-interface CarDiagnosticDataValidator {
+public interface CarDiagnosticDataValidator {
     boolean hasMissingDataFields();
     boolean hasMissingParts();
     boolean hasDamagedParts();

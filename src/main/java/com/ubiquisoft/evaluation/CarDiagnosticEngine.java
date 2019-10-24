@@ -1,8 +1,8 @@
 package com.ubiquisoft.evaluation;
 
-import static com.ubiquisoft.evaluation.enums.ExitCode.ERROR;
-import static com.ubiquisoft.evaluation.enums.ExitCode.OK;
+import static com.ubiquisoft.evaluation.enums.ExitCode.*;
 
+import com.ubiquisoft.evaluation.diagnosticdata.*;
 import com.ubiquisoft.evaluation.domain.Car;
 import com.ubiquisoft.evaluation.domain.xml.unmarshaller.CarCreator;
 import com.ubiquisoft.evaluation.enums.ExitCode;

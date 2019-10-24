@@ -1,12 +1,9 @@
 package com.ubiquisoft.evaluation.domain;
 
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.*;
 
-import java.util.Collections;
-import java.util.List;
+import javax.xml.bind.annotation.*;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -45,7 +42,7 @@ public final class Car {
 
 	public List<Part> getParts() {
 		if (parts == null)
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		return Collections.unmodifiableList(parts);
 	}
 

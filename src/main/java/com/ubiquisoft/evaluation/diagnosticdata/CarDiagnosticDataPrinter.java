@@ -1,6 +1,6 @@
-package com.ubiquisoft.evaluation;
+package com.ubiquisoft.evaluation.diagnosticdata;
 
-interface CarDiagnosticDataPrinter {
+public interface CarDiagnosticDataPrinter {
     void printMissingDataFields();
     void printMissingParts();
     void printDamagedParts();
