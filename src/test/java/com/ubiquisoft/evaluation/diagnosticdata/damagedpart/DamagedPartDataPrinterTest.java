@@ -2,7 +2,6 @@ package com.ubiquisoft.evaluation.diagnosticdata.damagedpart;
 
 import static com.ubiquisoft.evaluation.CommonTestMembers.*;
 import static com.ubiquisoft.evaluation.TestConstants.*;
-import static com.ubiquisoft.evaluation.diagnosticdata.damagedpart.CommonDamagedPartDataTestMembers.EXTRACTOR;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.*;
@@ -26,7 +25,7 @@ class DamagedPartDataPrinterTest extends CommonDataPrinterTestMembers {
 
     private void createPrinter(String xmlToUse) {
         createCarFromXml(xmlToUse);
-        DamagedPartData diagnosticData = EXTRACTOR.extractDiagnosticData(car);
+        DamagedPartData diagnosticData = new DamagedPartDataExtractor().extractDiagnosticData(car);
         printer = new DamagedPartDataPrinter(diagnosticData);
     }
 
@@ -37,17 +36,16 @@ class DamagedPartDataPrinterTest extends CommonDataPrinterTestMembers {
         // when
         printer.printDiagnosticData();
         // then
-        assertThat(outContent.toString()).isEqualTo(EXPECTED_DAMAGED_PARTS);
+        assertThat(outContentSplitToStringArray()).containsOnly(EXPECTED_DAMAGED_PARTS);
     }
 
-    @Disabled
-    @Test   // TODO - bug, cant print multiple damaged tires
+    @Test
     void whenAllPartsDamagedInXmlThenAllPartsPrinted() {
         // given
         createPrinter(INVALID_XML_ALL_PARTS_DAMAGED);
         // when
         printer.printDiagnosticData();
         // then
-        assertThat(outContent.toString()).isEqualTo(EXPECTED_ALL_PARTS_DAMAGED);
+        assertThat(outContentSplitToStringArray()).containsOnly(EXPECTED_ALL_PARTS_DAMAGED);
     }
 }

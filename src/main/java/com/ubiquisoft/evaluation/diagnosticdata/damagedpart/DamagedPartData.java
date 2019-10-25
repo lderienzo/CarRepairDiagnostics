@@ -1,20 +1,20 @@
 package com.ubiquisoft.evaluation.diagnosticdata.damagedpart;
 
-import java.util.*;
 
+import com.google.common.collect.*;
 import com.ubiquisoft.evaluation.diagnosticdata.DiagnosticData;
 import com.ubiquisoft.evaluation.domain.*;
 
 public class DamagedPartData extends DiagnosticData {
 
-    private final Map<PartType, ConditionType> damagedParts;
+    private final Multimap<PartType, ConditionType> damagedParts;
 
 
-    public DamagedPartData(Map<PartType, ConditionType> damagedParts) {
+    public DamagedPartData(Multimap<PartType, ConditionType> damagedParts) {
         this.damagedParts = damagedParts;
     }
 
-    public Map<PartType, ConditionType> getDamagedParts() {
-        return Collections.unmodifiableMap(damagedParts);
+    public Multimap<PartType, ConditionType> getDamagedParts() {
+        return Multimaps.unmodifiableMultimap(damagedParts);
     }
 }

@@ -2,41 +2,45 @@ package com.ubiquisoft.evaluation.diagnosticdata.damagedpart;
 
 import static com.ubiquisoft.evaluation.CommonTestMembers.*;
 import static com.ubiquisoft.evaluation.TestConstants.*;
-import static com.ubiquisoft.evaluation.diagnosticdata.damagedpart.CommonDamagedPartDataTestMembers.EXTRACTOR;
 import static com.ubiquisoft.evaluation.domain.ConditionType.*;
 import static com.ubiquisoft.evaluation.domain.PartType.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.assertj.guava.api.Assertions.assertThat;
 
-import java.util.EnumMap;
-import java.util.Map;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import com.ubiquisoft.evaluation.domain.ConditionType;
-import com.ubiquisoft.evaluation.domain.PartType;
+import com.google.common.collect.*;
+import com.ubiquisoft.evaluation.domain.*;
 
 class DamagedPartDataExtractorTest {
 
     @Test
     void whenNoPartsDamagedInXmlThenNoDamagedPartDataExtracted() {
         // given/when
-        createCarFromXml(VALID_XML);
+        DamagedPartData diagnosticData = extractDiagnosticData(VALID_XML);
         // then
-        assertThat(EXTRACTOR.extractDiagnosticData(car).getDamagedParts()).isEmpty();
+        assertThat(diagnosticData.getDamagedParts().isEmpty()).isTrue();
     }
 
-    @Test
+    private DamagedPartData extractDiagnosticData(String xmlToUse) {
+        // given
+        createCarFromXml(xmlToUse);
+        DamagedPartDataExtractor extractor = new DamagedPartDataExtractor();
+        // when
+        return extractor.extractDiagnosticData(car);
+    }
+
+    @Test // TODO
     void whenSomeDamagedPartsInXmlThenDamagedPartDataExtracted() {
         // given/when
-        createCarFromXml(INVALID_XML_DAMAGED_PARTS);
+        DamagedPartData diagnosticData = extractDiagnosticData(INVALID_XML_DAMAGED_PARTS);
         // then
-        assertThat(EXTRACTOR.extractDiagnosticData(car).getDamagedParts().entrySet())
-                .containsExactlyInAnyOrderElementsOf(expectedSomeDamagedPartsMap().entrySet());
+        assertThat(diagnosticData.getDamagedParts()).hasSameEntriesAs(expectedSomeDamagedPartsMap());
     }
 
-    private Map<PartType, ConditionType> expectedSomeDamagedPartsMap() {
-        Map<PartType, ConditionType> expected = new EnumMap<>(PartType.class);
+    private Multimap<PartType, ConditionType> expectedSomeDamagedPartsMap() {
+        Multimap<PartType, ConditionType> expected = ArrayListMultimap.create();
         expected.put(ENGINE, USED);
         expected.put(ELECTRICAL, NO_POWER);
         expected.put(TIRE, FLAT);
@@ -44,23 +48,24 @@ class DamagedPartDataExtractorTest {
         return expected;
     }
 
-    @Disabled
-    @Test   // TODO -- This test exposes a bug where if multiple tires are damaged the damaged part map DOES NOT track them
+    @Test
     void whenAllPartsDamagedInXmlThenAllDamagedPartDataExtracted() {
         // given/when
-        createCarFromXml(INVALID_XML_ALL_PARTS_DAMAGED);
+        DamagedPartData diagnosticData = extractDiagnosticData(INVALID_XML_ALL_PARTS_DAMAGED);
         // then
-        assertThat(EXTRACTOR.extractDiagnosticData(car).getDamagedParts().entrySet())
-                .containsExactlyInAnyOrderElementsOf(expectedAllDamagedPartsMap().entrySet());
+        assertThat(diagnosticData.getDamagedParts()).hasSameEntriesAs(expectedAllDamagedPartsMap());
     }
 
-    private Map<PartType, ConditionType> expectedAllDamagedPartsMap() {
-        Map<PartType, ConditionType> expected = new EnumMap<>(PartType.class);
+    private Multimap<PartType, ConditionType> expectedAllDamagedPartsMap() {
+        Multimap<PartType, ConditionType> expected = ArrayListMultimap.create();
         expected.put(ENGINE, USED);
         expected.put(ELECTRICAL, USED);
-        expected.put(TIRE, USED);
         expected.put(FUEL_FILTER, USED);
         expected.put(OIL_FILTER, USED);
+        expected.put(TIRE, FLAT);
+        expected.put(TIRE, USED);
+        expected.put(TIRE, FLAT);
+        expected.put(TIRE, DAMAGED);
         return expected;
     }
 }

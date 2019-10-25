@@ -16,7 +16,7 @@
 	<parts>
 		<inventoryId>tire</inventoryId>
 		<type>TIRE</type>
-		<condition>WORN</condition>
+		<condition>FLAT</condition>
 	</parts>
 	<parts>
 		<inventoryId>tire</inventoryId>

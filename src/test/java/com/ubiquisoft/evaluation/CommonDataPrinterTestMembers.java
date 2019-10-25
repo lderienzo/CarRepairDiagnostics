@@ -9,6 +9,9 @@ public class CommonDataPrinterTestMembers {
     protected final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private PrintStream sysOut;
 
+    protected String[] outContentSplitToStringArray() {
+        return outContent.toString().split("\n");
+    }
 
     void redirectSystemOutputToOutContent() {
         sysOut = System.out;

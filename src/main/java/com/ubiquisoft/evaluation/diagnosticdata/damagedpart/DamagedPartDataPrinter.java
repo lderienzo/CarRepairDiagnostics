@@ -1,5 +1,6 @@
 package com.ubiquisoft.evaluation.diagnosticdata.damagedpart;
 
+import java.util.Collection;
 import java.util.Map;
 
 import com.ubiquisoft.evaluation.diagnosticdata.DiagnosticDataPrinter;
@@ -18,15 +19,14 @@ public class DamagedPartDataPrinter implements DiagnosticDataPrinter {
 
     @Override
     public void printDiagnosticData() {
-        diagnosticData.getDamagedParts().entrySet().forEach(e -> printDamagedPart(partType(e), conditionType(e)));
+        diagnosticData.getDamagedParts().asMap().entrySet()
+            .forEach(entry -> entry.getValue().forEach(
+                conditionType -> printDamagedPart(partType(entry), conditionType))
+            );
     }
 
-    private PartType partType(Map.Entry<PartType, ConditionType> e) {
+    private PartType partType(Map.Entry<PartType, Collection<ConditionType>> e) {
         return e.getKey();
-    }
-
-    private ConditionType conditionType(Map.Entry<PartType, ConditionType> e) {
-        return e.getValue();
     }
 
     private void printDamagedPart(PartType partType, ConditionType condition) {

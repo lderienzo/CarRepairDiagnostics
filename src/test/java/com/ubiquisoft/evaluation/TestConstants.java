@@ -17,32 +17,32 @@ public final class TestConstants {
     public static final String INVALID_XML_ALL_PARTS_DAMAGED = "SampleCar-all-parts-damaged.xml";
     public static final String VALID_XML = "SampleCar-all-diagnostics-valid.xml";
     public static final String EXPECTED_MISSING_ALL_DATA_FIELDS =
-            MISSING_DATA_FIELD_DETECTED_MSG + " make\n" +
-            MISSING_DATA_FIELD_DETECTED_MSG + " model\n" +
-            MISSING_DATA_FIELD_DETECTED_MSG + " year\n";
+                    MISSING_DATA_FIELD_DETECTED_MSG + " make\n" +
+                    MISSING_DATA_FIELD_DETECTED_MSG + " model\n" +
+                    MISSING_DATA_FIELD_DETECTED_MSG + " year\n";
     public static final String EXPECTED_MISSING_PARTS =
-            MISSING_PART_DETECTED_MSG + " ENGINE - Count: 1\n" +
-            MISSING_PART_DETECTED_MSG + " TIRE - Count: 2\n" +
-            MISSING_PART_DETECTED_MSG + " FUEL_FILTER - Count: 1\n";
+                    MISSING_PART_DETECTED_MSG + " ENGINE - Count: 1\n" +
+                    MISSING_PART_DETECTED_MSG + " TIRE - Count: 2\n" +
+                    MISSING_PART_DETECTED_MSG + " FUEL_FILTER - Count: 1\n";
     public static final String EXPECTED_MISSING_ALL_PARTS =
-            MISSING_PART_DETECTED_MSG + " ENGINE - Count: 1\n" +
-            MISSING_PART_DETECTED_MSG + " ELECTRICAL - Count: 1\n" +
-            MISSING_PART_DETECTED_MSG + " TIRE - Count: 4\n" +
-            MISSING_PART_DETECTED_MSG + " FUEL_FILTER - Count: 1\n" +
-            MISSING_PART_DETECTED_MSG + " OIL_FILTER - Count: 1\n";
-    public static final String EXPECTED_DAMAGED_PARTS =
-            DAMAGED_PART_DETECTED_MSG + " ENGINE - Condition: USED\n" +
-            DAMAGED_PART_DETECTED_MSG + " ELECTRICAL - Condition: NO_POWER\n" +
-            DAMAGED_PART_DETECTED_MSG + " TIRE - Condition: FLAT\n" +
-            DAMAGED_PART_DETECTED_MSG + " OIL_FILTER - Condition: CLOGGED\n";
-    public static final String EXPECTED_ALL_PARTS_DAMAGED =
-            DAMAGED_PART_DETECTED_MSG + " ENGINE - Condition: USED\n" +
-            DAMAGED_PART_DETECTED_MSG + " ELECTRICAL - Condition: USED\n" +
-            DAMAGED_PART_DETECTED_MSG + " TIRE - Condition: WORN\n" +
-            DAMAGED_PART_DETECTED_MSG + " TIRE - Condition: USED\n" +
-            DAMAGED_PART_DETECTED_MSG + " TIRE - Condition: FLAT\n" +
-            DAMAGED_PART_DETECTED_MSG + " TIRE - Condition: DAMAGED\n" +
-            DAMAGED_PART_DETECTED_MSG + " FUEL_FILTER - Condition: USED\n" +
-            DAMAGED_PART_DETECTED_MSG + " OIL_FILTER - Condition: USED\n";
+                    MISSING_PART_DETECTED_MSG + " ENGINE - Count: 1\n" +
+                    MISSING_PART_DETECTED_MSG + " ELECTRICAL - Count: 1\n" +
+                    MISSING_PART_DETECTED_MSG + " TIRE - Count: 4\n" +
+                    MISSING_PART_DETECTED_MSG + " FUEL_FILTER - Count: 1\n" +
+                    MISSING_PART_DETECTED_MSG + " OIL_FILTER - Count: 1\n";
+    public static final String[] EXPECTED_DAMAGED_PARTS = {
+                    DAMAGED_PART_DETECTED_MSG + " ENGINE - Condition: USED",
+                    DAMAGED_PART_DETECTED_MSG + " TIRE - Condition: FLAT",
+                    DAMAGED_PART_DETECTED_MSG + " ELECTRICAL - Condition: NO_POWER",
+                    DAMAGED_PART_DETECTED_MSG + " OIL_FILTER - Condition: CLOGGED"};
+    public static final String[] EXPECTED_ALL_PARTS_DAMAGED = {
+                    DAMAGED_PART_DETECTED_MSG + " ENGINE - Condition: USED",
+                    DAMAGED_PART_DETECTED_MSG + " TIRE - Condition: FLAT",
+                    DAMAGED_PART_DETECTED_MSG + " TIRE - Condition: USED",
+                    DAMAGED_PART_DETECTED_MSG + " TIRE - Condition: FLAT",
+                    DAMAGED_PART_DETECTED_MSG + " TIRE - Condition: DAMAGED",
+                    DAMAGED_PART_DETECTED_MSG + " ELECTRICAL - Condition: USED",
+                    DAMAGED_PART_DETECTED_MSG + " FUEL_FILTER - Condition: USED",
+                    DAMAGED_PART_DETECTED_MSG + " OIL_FILTER - Condition: USED"};
     public static final CarCreator CAR_CREATOR = new CarCreator();
 }
